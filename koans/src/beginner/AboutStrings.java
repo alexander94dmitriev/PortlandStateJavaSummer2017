@@ -13,7 +13,7 @@ public class AboutStrings {
 
     @Koan
     public void implicitStrings() {
-        assertEquals("just a plain ole string".getClass(), new String().getClass());
+        assertEquals("just a plain ole string".getClass(), String.class);
     }
 
     @Koan
@@ -165,7 +165,7 @@ public class AboutStrings {
             String.format("%s %s %s", "a", "b");
             fail("No Exception was thrown!");
         } catch (Exception e) {
-            assertEquals(e.getClass(), new MissingFormatArgumentException("").getClass());
+            assertEquals(e.getClass(), MissingFormatArgumentException.class);
             assertEquals(e.getMessage(), "Format specifier '%s'");
         }
     }
