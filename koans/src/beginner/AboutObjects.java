@@ -5,6 +5,7 @@ import com.sandwich.koan.Koan;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.sandwich.koan.constant.KoanConstants.__;
 import static com.sandwich.util.Assert.assertEquals;
@@ -13,7 +14,7 @@ public class AboutObjects {
 
     @Koan
     public void newObjectInstancesCanBeCreatedDirectly() {
-        assertEquals(new Object() instanceof Object, __);
+        assertEquals(new Object() instanceof Object, true);
     }
 
     @Koan
@@ -22,15 +23,15 @@ public class AboutObjects {
         }
 
         Class<?>[] ancestors = getAncestors(new Foo());
-        assertEquals(ancestors[0], __);
-        assertEquals(ancestors[1], __);
+        assertEquals(ancestors[0], new Foo().getClass());
+        assertEquals(ancestors[1], Object.class);
     }
 
     @Koan
     public void objectToString() {
         Object object = new Object();
         String expectedToString = MessageFormat.format("{0}@{1}", Object.class.getName(), Integer.toHexString(object.hashCode()));
-        assertEquals(expectedToString, __); // hint: object.toString()
+        assertEquals(expectedToString, object.toString()); // hint: object.toString()
     }
 
     @Koan
@@ -42,7 +43,7 @@ public class AboutObjects {
                 return string;
             }
         };
-        assertEquals(string + object, __);
+        assertEquals(string + object, "haha");
     }
 
     @Koan
@@ -50,7 +51,7 @@ public class AboutObjects {
         String string = "string";
         Integer i = new Integer(128);
         Short s = new Short((short) 15);
-        assertEquals(string + " " + i + " " + s, __);
+        assertEquals(string + " " + i + " " + s, "string 128 15");
     }
 
     private Class<?>[] getAncestors(Object object) {
