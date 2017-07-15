@@ -24,13 +24,13 @@ public class AboutInnerClasses {
     @Koan
     public void creatingInnerClassInstance() {
         Inner someObject = new Inner();
-        assertEquals(someObject.doStuff(), __);
+        assertEquals(someObject.doStuff(), "stuff");
     }
 
     @Koan
     public void creatingInnerClassInstanceWithOtherSyntax() {
         AboutInnerClasses.Inner someObject = this.new Inner();
-        assertEquals(someObject.doStuff(), __);
+        assertEquals(someObject.doStuff(), "stuff");
     }
 
     private int x = 10;
@@ -38,7 +38,7 @@ public class AboutInnerClasses {
     @Koan
     public void accessingOuterClassMembers() {
         Inner someObject = new Inner();
-        assertEquals(someObject.returnOuter(), __);
+        assertEquals(someObject.returnOuter(), 10);
     }
 
     @Koan
