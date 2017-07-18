@@ -91,6 +91,20 @@ public class Flight extends AbstractFlight {
     return this.departDate + " " + this.departTime;
   }
 
+  /**
+   * Getter for departure date
+   * @return
+   *          departure date
+   */
+  public String getDepartDate() { return this.departDate; }
+
+  /**
+   * Getter for departure time
+   * @return
+   *          departure time
+   */
+  public String getDepartTime() { return this.departTime; }
+
     /**
      * Getter for destination
      * @return
@@ -111,4 +125,17 @@ public class Flight extends AbstractFlight {
     return this.arriveDate + " " + this.arriveTime;
   }
 
+  /**
+   * Getter for arrival date
+   * @return
+   *          arrival date
+   */
+  public String getArriveDate() { return this.arriveDate; }
+
+  /**
+   * Getter for arrival time
+   * @return
+   *          arrival time
+   */
+  public String getArriveTime() { return this.arriveTime; }
 }

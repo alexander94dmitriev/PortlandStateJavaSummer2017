@@ -11,7 +11,7 @@ import java.util.Date;
  * It checks for the options and then performs a check of the other arguments.
  * If there's a problem with one of them, the program displays error and exists
  */
-public class Project1 {
+public class Project2 {
 
   /**
    * The main function that performs the task as per Project 1 requirements
@@ -67,7 +67,7 @@ public class Project1 {
         System.out.println("Airline has a name and the list of the flights.");
         System.out.println("Flight has a flight number, a source and destination, departure and arrival dates.");
         System.out.println("Project 1 creates those objects and adds Flight to Airline by using the command line arguments:");
-        System.out.println("\njava edu.pdx.cs410J.<login-id>.Project1 [options] <args>\n");
+        System.out.println("\njava edu.pdx.cs410J.<login-id>.Project2 [options] <args>\n");
         System.out.println("The program also accepts two possible options:");
         System.out.println("-print - prints out the description of the new flight");
         System.out.println("-README - prints a readme for this project");
