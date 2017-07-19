@@ -49,8 +49,15 @@ public class Project2 {
         checkArgs(args);
         printIndex = searchOption("-print", arguments);
         textFileIndex = searchOption("-textFile", arguments);
-        if(textFileIndex != -1)
+
+        if(textFileIndex != -1) {
+            if(allOptions.contains(args[textFileIndex+1]))
+            {
+                System.err.println("Please, make sure to add file name after -textFile");
+                System.exit(1);
+            }
             fileIndex = textFileIndex + 1;
+        }
         //Make a list of indexes to find the max. max+1 is the first argument for creating objects
         optionIndexes = Arrays.asList(printIndex, textFileIndex);
         if(Collections.max(optionIndexes) > fileIndex)

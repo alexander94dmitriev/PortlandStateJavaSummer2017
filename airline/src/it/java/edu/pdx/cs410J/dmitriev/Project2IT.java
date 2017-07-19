@@ -55,7 +55,7 @@ public class Project2IT extends InvokeMainTestCase {
 
     @Test
     public void test1CreateNewAirlineFileWhenFileDoesNotExist() throws FileNotFoundException {
-        //assertThat(airlineFile.exists(), equalTo(false));
+        assertThat(airlineFile.exists(), equalTo(false));
 
         MainMethodResult result =
                 invokeProject2("-textFile", airlineFile.getAbsolutePath(), "MyAirline",

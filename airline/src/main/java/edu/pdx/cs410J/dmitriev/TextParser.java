@@ -7,12 +7,24 @@ import javax.imageio.IIOException;
 import java.io.*;
 
 /**
- * Created by sanek94cool on 14.07.2017.
+ * TextParser get the name of the file along with the name of the Airline being read.
+ * It supposed to correctly read the data about the Airline on a specific file along with the flights.
+ * It should also check that flights data is correct by using the same method that were used to check
+ * program line arguments.
+ * If the file does not exist, the class should create it with an empty Airline being added
+ * It also handles IO and Parser exceptions
  */
 public class TextParser implements AirlineParser<Airline> {
     private String fileName;
     private String airlineToRead;
 
+    /**
+     * Constructor for TextParser
+     * @param newName
+     *                  the name of the file being read/ created with empty Airline
+     * @param newAirlineToRead
+     *                  the name of Airline to read/ add to an empty file
+     */
     TextParser(String newName, String newAirlineToRead)
     {
         this.fileName = newName;
@@ -45,6 +57,11 @@ public class TextParser implements AirlineParser<Airline> {
         return airline;
     }
 
+    /**
+     * Check that the file exists
+     * @return
+     *          true if exists, false otherwise
+     */
     private boolean checkFileExistence()
     {
         File f = new File(fileName);
@@ -53,6 +70,13 @@ public class TextParser implements AirlineParser<Airline> {
         else return false;
     }
 
+    /**
+     * Create a new file with an Airline added
+     * @return
+     *         an airline being added
+     * @throws IOException
+     *          if IO error found
+     */
     private Airline createNewFile() throws IOException {
         Writer writer = new BufferedWriter(new FileWriter(new File(fileName)));
         writer.write(airlineToRead+"\n");

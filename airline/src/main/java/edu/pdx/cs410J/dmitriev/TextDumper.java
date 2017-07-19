@@ -19,10 +19,23 @@ public class TextDumper implements AirlineDumper<Airline>{
 
     private String fileName;
 
+    /**
+     * Constructor for TextDumper
+     * @param newFileName
+     *                      the name of the file being created
+     */
     TextDumper(String newFileName)
     {
         this.fileName = newFileName;
     }
+
+    /**
+     * Call writeFile() method to dump the Airline and add it to text file
+     * @param airline
+     *                  Airline to dump
+     * @throws IOException
+     *                  If IO error is found
+     */
     @Override
     public void dump(Airline airline) throws IOException {
         writeFile(airline);
@@ -56,6 +69,7 @@ public class TextDumper implements AirlineDumper<Airline>{
             }
 
             writer.close();
+            //writer = null;
             System.gc();
         } catch (IOException ex) {
             writer.close();
