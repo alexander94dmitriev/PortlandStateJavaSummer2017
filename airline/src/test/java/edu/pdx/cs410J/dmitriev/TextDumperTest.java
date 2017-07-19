@@ -4,6 +4,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class TextDumperTest {
 
     Airline airline = new Airline("CS410J Airline");
-    TextDumper dump = new TextDumper();
+    TextDumper dump = new TextDumper("CS410J Airline");
 
     @Test
     public void getAirlineName() {
@@ -22,7 +23,7 @@ public class TextDumperTest {
     }
 
     @Test
-    public void createNewFileAndAddAirlineWithFlights() {
+    public void createNewFileAndAddAirlineWithFlights() throws IOException {
         Flight flight_a = new Flight("42", "PTR", "3/11/2017", "12:40",
                 "SPB", "4/11/2017", "20:15");
         Flight flight_b = new Flight("42", "AAA", "3/11/2017", "12:40",

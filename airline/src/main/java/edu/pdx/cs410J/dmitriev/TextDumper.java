@@ -2,6 +2,7 @@ package edu.pdx.cs410J.dmitriev;
 
 import edu.pdx.cs410J.AirlineDumper;
 
+import javax.xml.soap.Text;
 import java.io.*;
 import java.util.Collection;
 
@@ -15,6 +16,13 @@ public class TextDumper implements AirlineDumper<Airline>{
      * @param airline
      * @throws IOException
      */
+
+    private String fileName;
+
+    TextDumper(String newFileName)
+    {
+        this.fileName = newFileName;
+    }
     @Override
     public void dump(Airline airline) throws IOException {
         writeFile(airline);
@@ -29,13 +37,15 @@ public class TextDumper implements AirlineDumper<Airline>{
      * @param airline
      *                  given Airline object that should be written to a text file
      */
-    public void writeFile(Airline airline)
+    public void writeFile(Airline airline) throws IOException
     {
         Writer writer = null;
 
         try {
-            writer = new BufferedWriter(new FileWriter(new File("src\\main\\java\\edu\\pdx\\cs410J\\dmitriev\\"+
-                                                                airline.getName()+".txt")));
+            writer = new BufferedWriter(new FileWriter(new File(fileName)));
+
+            //writer = new BufferedWriter(new FileWriter(new File("src\\main\\java\\edu\\pdx\\cs410J\\dmitriev\\"+
+                                                                //airline.getName()+".txt")));
             writer.write(airline.getName()+"\n");
             Collection<Flight> flightList = airline.getFlights();
 
@@ -46,8 +56,11 @@ public class TextDumper implements AirlineDumper<Airline>{
             }
 
             writer.close();
+            System.gc();
         } catch (IOException ex) {
-            // report
+            writer.close();
+            System.gc();
+            ex.printStackTrace();
         }
     }
 }

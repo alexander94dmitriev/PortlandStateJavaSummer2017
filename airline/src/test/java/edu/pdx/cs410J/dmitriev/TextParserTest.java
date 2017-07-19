@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.dmitriev;
 
+import edu.pdx.cs410J.ParserException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -17,13 +18,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class TextParserTest {
 
     Airline airline_read = null;
-    Airline airline = new Airline("CS410J Airline1");
-    TextParser parser = new TextParser("CS410J Airline");
+    Airline airline = new Airline("CS410J Airline");
+    TextParser parser = new TextParser("CS410J Airline", "CS410J Airline");
 
 
     @Test
     public void createNewFileAndAddAirlineWithFlights() throws IOException {
-        TextDumper dumper = new TextDumper();
+        TextDumper dumper = new TextDumper("CS410J Airline");
         Flight flight_a = new Flight("42", "PTR", "3/11/2017", "12:40",
                 "SPB", "4/11/2017", "20:15");
         Flight flight_b = new Flight("42", "AAA", "3/11/2017", "12:40",
@@ -32,7 +33,13 @@ public class TextParserTest {
         airline.addFlight(flight_b);
         dumper.writeFile(airline);
 
-        airline_read = parser.readFile();
+        try {
+            airline_read = parser.parse();
+        }
+        catch (ParserException e)
+        {
+
+        }
         Collection<Flight> allFligths = airline.getFlights();
         assertThat(airline_read.getName(), equalTo("CS410J Airline"));
 
@@ -44,10 +51,22 @@ public class TextParserTest {
         }
     }
 
-    @AfterClass
+    @Test
+    public void createEmptyAirline() throws IOException {
+        try
+        {
+            airline_read = parser.parse();
+        }
+        catch (ParserException e)
+        {
+
+        }
+    }
+
+    //AfterClass
     public static void deleteFile()
     {
-        File file = new File("src\\main\\java\\edu\\pdx\\cs410J\\dmitriev\\CS410J Airline1.txt");
+        File file = new File("src\\main\\java\\edu\\pdx\\cs410J\\dmitriev\\CS410J Airline.txt");
         file.delete();
     }
 
