@@ -74,7 +74,7 @@ public class TextDumper implements AirlineDumper<Airline>{
         } catch (IOException ex) {
             writer.close();
             System.gc();
-            ex.printStackTrace();
+            System.err.println("Error writing a file, please check your arguments");
         }
     }
 }
