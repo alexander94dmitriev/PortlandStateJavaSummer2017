@@ -2,13 +2,9 @@ package edu.pdx.cs410J.dmitriev;
 
 import edu.pdx.cs410J.InvokeMainTestCase;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 import java.io.*;
-import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -34,10 +30,10 @@ public class OldProject2IT extends InvokeMainTestCase {
     }
 
     /**
-     * Invokes the main method of {@link Project2} with the given arguments.
+     * Invokes the main method of {@link Project3} with the given arguments.
      */
     private MainMethodResult invokeMain(String... args) {
-        return invokeMain(Project2.class, args);
+        return invokeMain(Project3.class, args);
     }
 
     /**
@@ -52,46 +48,46 @@ public class OldProject2IT extends InvokeMainTestCase {
 
     @Test
     public void EverythingIsOk() {
-        MainMethodResult result = invokeMain("-print", "CS410J Airline", "42", "PSR", "3/11/2017", "12:40", "BBB", "4/11/2017", "20:15");
+        MainMethodResult result = invokeMain("-print", "CS410J Airline", "42", "PDX", "3/11/2017", "12:40", "am", "LAX", "4/11/2017", "20:15", "pm");
         assertThat(result.getExitCode(), equalTo(0));
     }
 
     @Test
     public void sourceCodeHasDigit() {
-        MainMethodResult result = invokeMain("-print", "CS410J Airline", "42", "P3R", "3/11/2017", "12:40", "BBB", "4/11/2017", "20:15");
+        MainMethodResult result = invokeMain("-print", "CS410J Airline", "42", "P1X", "3/11/2017", "12:40", "am", "LAX", "4/11/2017", "20:15", "pm");
         assertThat(result.getExitCode(), equalTo(1));
     }
 
     @Test
     public void sourceCodeHasLessThan3Characters() {
-        MainMethodResult result = invokeMain("-print", "CS410J Airline", "42", "P", "3/11/2017", "12:40", "BBB", "4/11/2017", "20:15");
+        MainMethodResult result = invokeMain("-print", "CS410J Airline", "42", "PD", "3/11/2017", "12:40", "am", "LAX", "4/11/2017", "20:15", "pm");
         assertThat(result.getExitCode(), equalTo(1));
     }
 
     @Test
     public void otherArgs() {
-        MainMethodResult result = invokeMain("-print", "CS410J Airline", "42", "P", "3/11/2017", "12:40", "BBB", "4/11/2017", "20:15", "Blablabla");
+        MainMethodResult result = invokeMain("-print", "CS410J Airline", "42", "PDX", "3/11/2017", "12:40", "am", "LAX", "4/11/2017", "20:15", "pm", "blabla");
         assertThat(result.getExitCode(), equalTo(1));
     }
 
     @Test
     public void README() {
-        MainMethodResult result = invokeMain("-README","-textFile", pathname, "-print", "CS410J Airline", "42", "PPP", "3/11/2017", "12:40", "BBB", "4/11/2017", "20:15");
+        MainMethodResult result = invokeMain("-README","-textFile", pathname, "-print", "CS410J Airline", "42", "PDX", "3/11/2017", "12:40", "LAX", "4/11/2017", "20:15");
         assertThat(result.getExitCode(), equalTo(0));
-        assertThat(result.getTextWrittenToStandardOut(), containsString("CS410P Project 2 - Storing An Airline in a Text File"));
+        assertThat(result.getTextWrittenToStandardOut(), containsString("CS410P Project 3 - Pretty Printing Your Airline"));
     }
 
-    @Test
+    //@Test
     public void WriteNewFile() {
         //assertThat(airline.exists(), equalTo(false));
-        MainMethodResult result = invokeMain("-print", "-textFile", pathname, "CS410J Airline", "42", "PPP", "3/11/2017", "12:40", "BBB", "4/11/2017", "20:15");
+        MainMethodResult result = invokeMain("-print", "-textFile", pathname, "CS410J Airline", "42", "PDX", "3/11/2017", "12:40", "LAX", "4/11/2017", "20:15");
         assertThat(result.getExitCode(), equalTo(0));
     }
 
-    @Test
+    ///@Test
     public void WriteNewFileAgain() {
         assertThat(airline.exists(), equalTo(false));
-        MainMethodResult result = invokeMain("-textFile", pathname, "-print", "CS410J Airline", "42", "PPP", "3/11/2017", "12:40", "BBB", "4/11/2017", "20:15");
+        MainMethodResult result = invokeMain("-textFile", pathname, "-print", "CS410J Airline", "42", "LAX", "3/11/2017", "12:40", "PDX", "4/11/2017", "20:15");
         assertThat(result.getExitCode(), equalTo(0));
     }
 

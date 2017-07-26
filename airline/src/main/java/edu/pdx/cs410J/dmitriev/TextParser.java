@@ -125,7 +125,7 @@ public class TextParser implements AirlineParser<Airline> {
                     System.gc();
                     throw new IOException("Unable to parse one of the flights, malformated data");
                 }
-                Flight newFlight = new Flight(split[0], split[1], split[2], split[3], split[4], split[5], split[6]);
+                Flight newFlight = new Flight(split[0], split[1], split[2], split[3], split[4], split[5], split[6], split[7], split[8]);
                 airline.addFlight(newFlight);
                 readLine = null;
             }
@@ -152,9 +152,11 @@ public class TextParser implements AirlineParser<Airline> {
                 !ArgumentChecker.checkSrc(array[1]) ||
                 !ArgumentChecker.checkDate(array[2]) ||
                 !ArgumentChecker.checkTime(array[3]) ||
-                !ArgumentChecker.checkDest(array[4]) ||
-                !ArgumentChecker.checkDate(array[5]) ||
-                !ArgumentChecker.checkTime(array[6]) ||
+                !ArgumentChecker.check_am_pm(array[4]) ||
+                !ArgumentChecker.checkDest(array[5]) ||
+                !ArgumentChecker.checkDate(array[6]) ||
+                !ArgumentChecker.checkTime(array[7]) ||
+                !ArgumentChecker.check_am_pm(array[8]) ||
                 !ArgumentChecker.checkNoOtherArgs(array,0)) {
             return false;
         } else return true;

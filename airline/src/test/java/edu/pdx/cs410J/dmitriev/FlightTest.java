@@ -10,30 +10,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class FlightTest {
 
-  Flight flight = new Flight("42", "Portland", "3/11/2017", "12:40",
-                             "Saint Petersburg", "4/11/2017", "20:15");
+  Flight flight = new Flight("42", "Portland", "4/11/2017", "1:40", "pm",
+                             "Saint Petersburg", "4/11/2017", "2:00", "pm");
 
-  @Test
-  public void getArrivalStringNeedsToBeImplemented() {
-    assertThat(this.flight.getArrivalString(), equalTo("4/11/2017 20:15"));
-  }
 
-  @Test
-  public void initiallyAllFlightsHaveTheSameNumber() {
-    assertThat(this.flight.getNumber(), equalTo(42));
-  }
 
-  @Test
-  public void forProject1ItIsOkayIfGetDepartureTimeReturnsNull() {
-    assertThat(this.flight.getDeparture(), is(nullValue()));
-  }
-
-  @Test
-  public void getDepartureAndArrival()
-  {
-    assertThat(this.flight.getDepartureString(), equalTo("3/11/2017 12:40"));
-    assertThat(this.flight.getArrivalString(), equalTo("4/11/2017 20:15"));
-  }
 
   @Test
   public void makeSureToGetSourceAndDestination() {
@@ -41,5 +22,15 @@ public class FlightTest {
     assertThat(this.flight.getDestination(), equalTo("Saint Petersburg"));
   }
 
+  @Test
+  public void CorrectDates() {
+    assertThat(this.flight.getDepartureString(), equalTo("4/11/17 1:40 PM"));
+    assertThat(this.flight.getArrivalString(), equalTo("4/11/17 2:00 PM"));
+  }
+
+  @Test
+  public void CheckInterval() {
+    assertThat(this.flight.Interval(), equalTo((long)20));
+  }
   
 }

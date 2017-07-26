@@ -64,8 +64,8 @@ public class TextDumper implements AirlineDumper<Airline>{
 
             for (Flight flight : flightList)
             {
-                writer.write(flight.getNumber()+";"+flight.getSource()+";"+flight.getDepartDate()+";"+
-                        flight.getDepartTime()+";"+flight.getDestination()+";"+flight.getArriveDate()+";"+flight.getArriveTime()+"\n");
+                writer.write(flight.getNumber()+";"+flight.getSource()+";"+flight.getDepartDate()+";"+ flight.getDepartTime()+";"+ flight.getDeparture_am_pm() + ";" +
+                        flight.getDestination()+";"+flight.getArriveDate()+";"+flight.getArriveTime()+ ";" + flight.getArrival_am_pm() + ";\n");
             }
 
             writer.close();

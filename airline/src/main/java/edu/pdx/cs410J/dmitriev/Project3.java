@@ -13,10 +13,10 @@ import java.util.*;
  * It checks for the options and then performs a check of the other arguments.
  * If there's a problem with one of them, the program displays error and exists
  */
-public class Project2 {
+public class Project3 {
 
-    private static List<String> allOptions = Arrays.asList("-print", "-textFile", "-README");
-    private static int MAX_ARGS = 12;
+    private static List<String> allOptions = Arrays.asList("-print", "-textFile", "-README", "-pretty");
+    private static int MAX_ARGS = 16;
 
     /**
      * The main function that performs the task as per Project 1 requirements
@@ -29,15 +29,19 @@ public class Project2 {
         Airline airline = null;
         TextParser parser;
         TextDumper dumper;
+        PrettyPrinter printer;
         boolean resultCheck;
         int readmeIndex = -1;
         int printIndex;
         int textFileIndex;
+        int prettyIndex;
+        int prettyFileIndex = -1;
         int firstIndex;
         int fileIndex = -1;
         String[] parts = null;
         List<String> arguments = Arrays.asList(args);
         List<Integer> optionIndexes;
+        List<Integer> fileIndexes;
 
         //Find the indexes of the options in the args
         if (args != null)
@@ -49,6 +53,7 @@ public class Project2 {
         checkArgs(args);
         printIndex = searchOption("-print", arguments);
         textFileIndex = searchOption("-textFile", arguments);
+        prettyIndex = searchOption("-pretty", arguments);
 
         if(textFileIndex != -1) {
             if(allOptions.contains(args[textFileIndex+1]))
@@ -58,18 +63,27 @@ public class Project2 {
             }
             fileIndex = textFileIndex + 1;
         }
+
+        if(prettyIndex != -1) {
+            if(allOptions.contains(args[prettyIndex+1]))
+            {
+                System.err.println("Please, make sure to add file name after -pretty");
+                System.exit(1);
+            }
+            prettyFileIndex = prettyIndex + 1;
+        }
         //Make a list of indexes to find the max. max+1 is the first argument for creating objects
         optionIndexes = Arrays.asList(printIndex, textFileIndex);
-        if(Collections.max(optionIndexes) > fileIndex)
-        firstIndex = Collections.max(optionIndexes) + 1;
-        else firstIndex = fileIndex + 1;
+        fileIndexes = Arrays.asList(fileIndex, prettyFileIndex);
+        int max = Math.max(Collections.max(optionIndexes),Collections.max(fileIndexes));
+        firstIndex = max + 1;
 
         //Make sure the arguments are correct
         resultCheck = ArgumentChecker.checkArguments(args, firstIndex);
         if (!resultCheck)
             System.exit(1);
 
-        //You need just a second part of string in "textFile fileName"
+        //Let the parser do its job
         if (textFileIndex != -1) {
             parts = args[textFileIndex].split(" ");
             parser = new TextParser(args[fileIndex],args[firstIndex]);
@@ -82,8 +96,9 @@ public class Project2 {
         }
         else airline = new Airline(args[firstIndex]);
         Flight flight = new Flight(args[firstIndex + 1], args[firstIndex + 2], args[firstIndex + 3], args[firstIndex + 4],
-                args[firstIndex + 5], args[firstIndex + 6], args[firstIndex + 7]);
+                args[firstIndex + 5], args[firstIndex + 6], args[firstIndex + 7], args[firstIndex + 8], args[firstIndex + 9]);
 
+        if(!airline.getFlights().contains(flight))
         airline.addFlight(flight);
 
         //Work with options
@@ -93,6 +108,15 @@ public class Project2 {
         if (textFileIndex != -1) {
             dumper = new TextDumper(args[fileIndex]);
             try { dumper.dump(airline); }
+            catch (IOException e)
+            {
+                System.err.println(e.getMessage());
+                System.exit(1);
+            }
+        }
+        if (prettyIndex != -1){
+            printer = new PrettyPrinter(args[prettyFileIndex]);
+            try { printer.dump(airline); }
             catch (IOException e)
             {
                 System.err.println(e.getMessage());
@@ -127,18 +151,21 @@ public class Project2 {
 
     private static void printREADME() {
         System.out.println("Alexander Dmitriev");
-        System.out.println("CS410P Project 2 - Storing An Airline in a Text File\n");
+        System.out.println("CS410P Project 3 - Pretty Printing Your Airline\n");
         System.out.println("This project creates Airline and Flight objects.");
         System.out.println("Airline has a name and the list of the flights.");
         System.out.println("Flight has a flight number, a source and destination, departure and arrival dates.");
-        System.out.println("Project 2 creates those objects and adds Flight to Airline by using the command line arguments:");
-        System.out.println("\njava edu.pdx.cs410J.<login-id>.Project2 [options] <args>\n");
-        System.out.println("In Project 2, the program can optionally read/write the file with an information");
+        System.out.println("Project 3 creates those objects and adds Flight to Airline by using the command line arguments:");
+        System.out.println("\njava edu.pdx.cs410J.<login-id>.Project3 [options] <args>\n");
+        System.out.println("In Project 3, the program can optionally read/write the file with an information.");
+        System.out.println("It cal also pretty print, in text file or standard out");
         System.out.println("about Airline and/or Flights in it.");
         System.out.println("The program also accepts 3 possible options:");
         System.out.println("-print - prints out the description of the new flight");
         System.out.println("-README - prints a readme for this project");
         System.out.println("-textFile file - Where to read/write the airline info");
+        System.out.println("-pretty file - Pretty print the airline’s flights to\n" +
+                            "a text file or standard out (file -)");
     }
 
     /**

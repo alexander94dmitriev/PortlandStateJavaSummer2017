@@ -19,8 +19,8 @@ public class AirlineTest {
 
     @Test
     public void addAndGetFlight() {
-        Flight flight = new Flight("42", "Portland", "3/11/2017", "12:40",
-                "Saint Petersburg", "4/11/2017", "20:15");
+        Flight flight = new Flight("42", "Portland", "3/11/2017", "12:40", "am",
+                "Saint Petersburg", "4/11/2017", "20:15", "pm");
         airline.addFlight(flight);
         assertThat(airline.findFlight(flight), equalTo(true));
     }

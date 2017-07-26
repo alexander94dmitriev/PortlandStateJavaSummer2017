@@ -1,5 +1,7 @@
 package edu.pdx.cs410J.dmitriev;
 
+import edu.pdx.cs410J.AirportNames;
+
 /**
  This class handles the check of the arguments for Airline and Flight
  */
@@ -52,6 +54,12 @@ public class ArgumentChecker {
                     System.err.println("The source code cannot contain digit");
                     return false;
                 }
+            }
+
+            if(AirportNames.getName(src.toUpperCase()) == null)
+            {
+                System.err.println("Unable to find a source code of the airport");
+                return false;
             }
         }
 
@@ -109,6 +117,12 @@ public class ArgumentChecker {
                     return false;
                 }
             }
+
+            if(AirportNames.getName(dest.toUpperCase()) == null)
+            {
+                System.err.println("Unable to find a destination code of the airport");
+                return false;
+            }
         }
         return true;
     }
@@ -124,9 +138,19 @@ public class ArgumentChecker {
      */
     public  static boolean checkNoOtherArgs(String[] args, int index)
     {
-        if (index >= args.length)
+        if (args.length-index > 10)
         {
             System.err.println("There're other args after Airline/Flight arguments");
+            return false;
+        }
+        else return true;
+    }
+
+    public static boolean check_am_pm(String am_pm)
+    {
+        if(!am_pm.equals("am") && !am_pm.equals("pm"))
+        {
+            System.err.println("No am/pm added with a time");
             return false;
         }
         else return true;
@@ -144,16 +168,19 @@ public class ArgumentChecker {
         String departureTime;
         String arrivalDate;
         String arrivalTime;
+        int keepFirstIndex = firstIndex;
 
         if (!checkName(array[firstIndex]) ||
                 !checkFlightNumber(array[++firstIndex]) ||
                 !checkSrc(array[++firstIndex]) ||
                 !checkDate(array[++firstIndex]) ||
                 !checkTime(array[++firstIndex]) ||
+                !check_am_pm(array[++firstIndex]) ||
                 !checkDest(array[++firstIndex]) ||
                 !checkDate(array[++firstIndex]) ||
                 !checkTime(array[++firstIndex]) ||
-                !checkNoOtherArgs(array,firstIndex)) {
+                !check_am_pm(array[++firstIndex]) ||
+                !checkNoOtherArgs(array,keepFirstIndex)) {
             return false;
         } else return true;
     }

@@ -24,10 +24,10 @@ public class TextDumperTest {
 
     @Test
     public void createNewFileAndAddAirlineWithFlights() throws IOException {
-        Flight flight_a = new Flight("42", "PTR", "3/11/2017", "12:40",
-                "SPB", "4/11/2017", "20:15");
-        Flight flight_b = new Flight("42", "AAA", "3/11/2017", "12:40",
-                "BBB", "4/11/2017", "20:15");
+        Flight flight_a = new Flight("42", "PTR", "3/11/2017", "12:40", "am",
+                "SPB", "4/11/2017", "20:15", "am");
+        Flight flight_b = new Flight("42", "AAA", "3/11/2017", "12:40", "am",
+                "BBB", "4/11/2017", "20:15", "am");
         airline.addFlight(flight_a);
         airline.addFlight(flight_b);
         dump.writeFile(airline);
