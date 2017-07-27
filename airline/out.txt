@@ -1,0 +1,19 @@
+
+	**********AIRLINE INFORMATION**********
+Airline name: MyAirline
+
+	**********FLIGHTS**********
+- flight number: 123
+- flight source: PDX
+- flight departure date and time: 7/16/17, 3:00 PM
+- flight destination: LAX
+- flight arrival date and time: 7/17/17, 6:00 AM
+- flight total duration: 900 minutes
+
+- flight number: 123
+- flight source: PDX
+- flight departure date and time: 7/16/17, 3:01 PM
+- flight destination: LAX
+- flight arrival date and time: 7/17/17, 6:00 AM
+- flight total duration: 899 minutes
+
