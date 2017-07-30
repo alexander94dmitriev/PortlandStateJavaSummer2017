@@ -26,35 +26,17 @@ public class AirlineRestClientIT {
     return new AirlineRestClient(HOSTNAME, port);
   }
 
-  @Test
-  public void test0RemoveAllMappings() throws IOException {
-    AirlineRestClient client = newAirlineRestClient();
-    client.removeAllMappings();
-  }
+
 
   @Test
-  public void test1EmptyServerContainsNoMappings() throws IOException {
+  public void sendAirlineWithFlight() throws IOException
+  {
     AirlineRestClient client = newAirlineRestClient();
-    Map<String, String> allKeysAndValues = client.getAllKeysAndValues();
-    assertThat(allKeysAndValues.size(), equalTo(0));
-  }
-
-  @Test
-  public void test2AddOneKeyValuePair() throws IOException {
-    AirlineRestClient client = newAirlineRestClient();
-    String testKey = "TEST KEY";
-    String testValue = "TEST VALUE";
-    client.addKeyValuePair(testKey, testValue);
-
-    String value = client.getValue(testKey);
-    assertThat(value, equalTo(testValue));
-  }
-
-  @Test
-  public void test4MissingRequiredParameterReturnsPreconditionFailed() throws IOException {
-    AirlineRestClient client = newAirlineRestClient();
-    Response response = client.postToMyURL();
-    assertThat(response.getContent(), containsString(Messages.missingRequiredParameter("key")));
-    assertThat(response.getCode(), equalTo(HttpURLConnection.HTTP_PRECON_FAILED));
+    Response response = client.sendFlight("CS410J","42", "PDX", "3/11/2017",
+           "12:40", "am", "ABI", "4/11/2017", "20:15", "pm", "nope");
+    //Response response = client.searchFlight("CS410J", "PDX", "SPB");
+    String content = response.getContent();
+    System.out.println(content);
+    //client.getAirline("CS410J");
   }
 }

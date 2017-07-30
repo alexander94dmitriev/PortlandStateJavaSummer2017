@@ -1,6 +1,7 @@
 package edu.pdx.cs410J.dmitriev;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.sun.corba.se.pept.transport.ResponseWaitingRoom;
 import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.IOException;
@@ -20,7 +21,6 @@ public class AirlineRestClient extends HttpRequestHelper
 
     private final String url;
 
-
     /**
      * Creates a client to the airline REST service running on the given host and port
      * @param hostName The name of the host
@@ -28,53 +28,53 @@ public class AirlineRestClient extends HttpRequestHelper
      */
     public AirlineRestClient( String hostName, int port )
     {
-        this.url = String.format( "http://%s:%d/%s/%s", hostName, port, WEB_APP, SERVLET );
+        this.url = String.format("http://%s:%d/%s/%s", hostName, port, WEB_APP, SERVLET);
     }
 
-    /**
-     * Returns all keys and values from the server
-     */
-    public Map<String, String> getAllKeysAndValues() throws IOException {
-      Response response = get(this.url);
-      return Messages.parseKeyValueMap(response.getContent());
+    public Response sendFlight(String airlineName, String newFlightNumber, String newSrc, String newDepartDate, String newDepartTime,
+                           String newDepart_am_pm, String newDest, String newArriveDate, String newArriveTime, String newArrive_am_pm, String print) throws IOException
+    {
+        Response response = postToMyURL("name",airlineName,"flightNumber",newFlightNumber,"src",newSrc, "departDate", newDepartDate,
+                                        "departTime",newDepartTime, "departampm", newDepart_am_pm,"dest", newDest, "arriveDate", newArriveDate,
+                                        "arriveTime", newArriveTime, "arriveampm", newArrive_am_pm, "-print", print);
+        throwExceptionIfNotOkayHttpStatus(response);
+
+        return response;
     }
 
-    /**
-     * Returns the value for the given key
-     */
-    public String getValue(String key) throws IOException {
-      Response response = get(this.url, "key", key);
-      throwExceptionIfNotOkayHttpStatus(response);
-      String content = response.getContent();
-      return Messages.parseKeyValuePair(content).getValue();
+    public Response searchFlight(String airlineName, String src, String dest) throws IOException
+    {
+        Response response = get(this.url, "name", airlineName, "src", src, "dest", dest);
+        throwExceptionIfNotOkayHttpStatus(response);
+
+        return response;
     }
 
-    public void addKeyValuePair(String key, String value) throws IOException {
-      Response response = postToMyURL("key", key, "value", value);
-      throwExceptionIfNotOkayHttpStatus(response);
+    public Response getAirline(String airlineName) throws IOException
+    {
+        Response response = get(this.url, "name", airlineName);
+        throwExceptionIfNotOkayHttpStatus(response);
+
+        return response;
     }
+
 
     @VisibleForTesting
     Response postToMyURL(String... keysAndValues) throws IOException {
-      return post(this.url, keysAndValues);
-    }
-
-    public void removeAllMappings() throws IOException {
-      Response response = delete(this.url);
-      throwExceptionIfNotOkayHttpStatus(response);
+        return post(this.url, keysAndValues);
     }
 
     private Response throwExceptionIfNotOkayHttpStatus(Response response) {
-      int code = response.getCode();
-      if (code != HTTP_OK) {
-        throw new AppointmentBookRestException(code);
-      }
-      return response;
+        int code = response.getCode();
+        if (code != HTTP_OK) {
+            throw new AppointmentBookRestException(code);
+        }
+        return response;
     }
 
     private class AppointmentBookRestException extends RuntimeException {
-      public AppointmentBookRestException(int httpStatusCode) {
-        super("Got an HTTP Status Code of " + httpStatusCode);
-      }
+        public AppointmentBookRestException(int httpStatusCode) {
+            super("Got an HTTP Status Code of " + httpStatusCode);
+        }
     }
 }

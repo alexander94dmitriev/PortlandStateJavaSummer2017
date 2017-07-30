@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.dmitriev;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import javax.servlet.ServletException;
@@ -18,43 +19,13 @@ import static org.mockito.Mockito.*;
  */
 public class AirlineServletTest {
 
-  @Test
-  public void initiallyServletContainsNoKeyValueMappings() throws ServletException, IOException {
-    AirlineServlet servlet = new AirlineServlet();
+    Airline airline = new Airline("CS410J Airline");
+    Flight flight = new Flight("42", "Portland", "3/11/2017", "12:40", "am",
+            "Saint Petersburg", "4/11/2017", "20:15", "pm");
 
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
-    PrintWriter pw = mock(PrintWriter.class);
+    @Test
+    public void test0SendAirlineWithFlight ()
+    {
 
-    when(response.getWriter()).thenReturn(pw);
-
-    servlet.doGet(request, response);
-
-    int expectedMappings = 0;
-    verify(pw).println(Messages.formatMappingCount(expectedMappings));
-    verify(response).setStatus(HttpServletResponse.SC_OK);
-  }
-
-  @Test
-  public void addOneMapping() throws ServletException, IOException {
-    AirlineServlet servlet = new AirlineServlet();
-
-    String testKey = "TEST KEY";
-    String testValue = "TEST VALUE";
-
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    when(request.getParameter("key")).thenReturn(testKey);
-    when(request.getParameter("value")).thenReturn(testValue);
-
-    HttpServletResponse response = mock(HttpServletResponse.class);
-    PrintWriter pw = mock(PrintWriter.class);
-
-    when(response.getWriter()).thenReturn(pw);
-
-    servlet.doPost(request, response);
-    verify(pw).println(Messages.mappedKeyValue(testKey, testValue));
-    verify(response).setStatus(HttpServletResponse.SC_OK);
-
-    assertThat(servlet.getValueForKey(testKey), equalTo(testValue));
-  }
+    }
 }
