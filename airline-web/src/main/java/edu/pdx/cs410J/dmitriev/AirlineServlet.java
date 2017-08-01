@@ -109,26 +109,23 @@ public class AirlineServlet extends HttpServlet {
         String departDate = getParameter("departDate", request);
         if(departDate == null)
             missingRequiredParameter(response, "departDate");
-        String departTime = getParameter("departTime",request);
-        if(departTime == null)
-            missingRequiredParameter(response, "departTime");
-        String depart_am_pm = getParameter("departampm", request);
-        if(depart_am_pm == null)
-            missingRequiredParameter(response, "departampm");
         String dest = getParameter("dest",request);
         if(dest == null)
             missingRequiredParameter(response, "dest");
         String arriveDate = getParameter("arriveDate", request);
         if(arriveDate == null)
             missingRequiredParameter(response, "arriveDate");
-        String arriveTime = getParameter("arriveTime",request);
-        if(arriveTime == null)
-            missingRequiredParameter(response, "arriveTime");
-        String arrive_am_pm = getParameter("arriveampm", request);
-        if(arrive_am_pm == null)
-            missingRequiredParameter(response, "arriveampm");
         String print = getParameter("-print", request);
 
+        String[] parts = departDate.split(" ");
+        departDate = parts[0];
+        String departTime = parts[1];
+        String depart_am_pm = parts[2];
+
+        parts = arriveDate.split(" ");
+        arriveDate = parts[0];
+        String arriveTime = parts[1];
+        String arrive_am_pm = parts[2];
 
         if(finalAirline == null || !finalAirline.getName().equals(airlineName))
         finalAirline = new Airline(airlineName);

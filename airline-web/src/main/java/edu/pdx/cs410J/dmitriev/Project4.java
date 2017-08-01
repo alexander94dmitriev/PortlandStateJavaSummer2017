@@ -113,6 +113,7 @@ public class Project4 {
 
         try
         {
+            if(portIndex != -1)
             port = Integer.parseInt(args[portIndex]);
         }
         catch (NumberFormatException ex)
@@ -123,6 +124,14 @@ public class Project4 {
 
         //Work with server
         try {
+            if(hostIndex != -1 && portIndex == -1)
+            {
+                error("Please, specify the port");
+            }
+            else if(hostIndex == -1 && portIndex != -1)
+            {
+                error("Please, specify the host");
+            }
             if(hostIndex != -1 && portIndex != -1) {
                 client = new AirlineRestClient(args[hostIndex], port);
 
@@ -151,7 +160,16 @@ public class Project4 {
             }
             else
             {
-                error("Please, make sure to provide host and port arguments");
+                //Work with it as in the first project
+                Airline airline = new Airline(args[firstIndex]);
+                Flight flight = new Flight(args[firstIndex + 1], args[firstIndex + 2], args[firstIndex + 3], args[firstIndex + 4],
+                        args[firstIndex + 5], args[firstIndex + 6], args[firstIndex + 7], args[firstIndex + 8], args[firstIndex + 9]);
+
+                if(!airline.getFlights().contains(flight))
+                    airline.addFlight(flight);
+                if (printOptionIndex != -1) {
+                    System.out.println(flight.toString());
+                }
             }
         }
         catch ( IOException ex )
@@ -196,21 +214,21 @@ public class Project4 {
 
     private static void printREADME() {
         System.out.println("Alexander Dmitriev");
-        System.out.println("CS410P Project 3 - Pretty Printing Your Airline\n");
+        System.out.println("CS410P Project 4 -  A REST-ful Airline Web Service\n");
         System.out.println("This project creates Airline and Flight objects.");
         System.out.println("Airline has a name and the list of the flights.");
         System.out.println("Flight has a flight number, a source and destination, departure and arrival dates.");
         System.out.println("Project 3 creates those objects and adds Flight to Airline by using the command line arguments:");
         System.out.println("\njava edu.pdx.cs410J.<login-id>.Project3 [options] <args>\n");
-        System.out.println("In Project 3, the program can optionally read/write the file with an information.");
-        System.out.println("It cal also pretty print, in text file or standard out");
+        System.out.println("In Project 4, the program interacts with the server and allows to add a new flight and search for" +
+                "a specific one.");
         System.out.println("about Airline and/or Flights in it.");
         System.out.println("The program also accepts 3 possible options:");
+        System.out.println("-host hostname -  Host computer on which the server runs");
+        System.out.println("-port port - Port on which the server is listening");
         System.out.println("-print - prints out the description of the new flight");
+        System.out.println("-search - Search for flights");
         System.out.println("-README - prints a readme for this project");
-        System.out.println("-textFile file - Where to read/write the airline info");
-        System.out.println("-pretty file - Pretty print the airline’s flights to\n" +
-                "a text file or standard out (file -)");
     }
 
     /**
