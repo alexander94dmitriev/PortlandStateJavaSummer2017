@@ -14,6 +14,10 @@ public interface AirlineService extends RemoteService {
    */
   Airline getAirline();
 
+  String getAirlineName();
+
+  Airline createAirline(String airlineName);
+
   /**
    * Always throws an undeclared exception so that we can see GWT handles it.
    */
@@ -23,5 +27,7 @@ public interface AirlineService extends RemoteService {
    * Always throws a declared exception so that we can see GWT handles it.
    */
   void throwDeclaredException() throws IllegalStateException;
+
+
 
 }

@@ -10,10 +10,24 @@ import edu.pdx.cs410J.dmitriev.client.AirlineService;
  */
 public class AirlineServiceImpl extends RemoteServiceServlet implements AirlineService
 {
+  Airline airline;
+
   @Override
   public Airline getAirline() {
-    Airline airline = new Airline();
     airline.addFlight(new Flight());
+    return airline;
+  }
+
+  @Override
+  public String getAirlineName()
+  {
+    return airline.getName();
+  }
+
+  @Override
+  public Airline createAirline(String airlineName) {
+    airline = new Airline();
+    airline.createNewAirline(airlineName);
     return airline;
   }
 

@@ -83,16 +83,14 @@ public class Project4 {
                 System.err.println("Please, make sure to add airline name, source and destination after -search");
                 System.exit(1);
             }
-            firstIndex = searchOptionIndex + 1;
         }
-        else
-        {
+
             //Make a list of indexes to find the max. max+1 is the first argument for creating objects
-            optionIndexes = Arrays.asList(printOptionIndex, hostOptionIndex);
+            optionIndexes = Arrays.asList(printOptionIndex, hostOptionIndex, searchOptionIndex);
             optionArgumentsIndexes = Arrays.asList(hostIndex, portIndex);
             int max = Math.max(Collections.max(optionIndexes),Collections.max(optionArgumentsIndexes));
             firstIndex = max + 1;
-        }
+
 
         if(searchOptionIndex == -1) {
             //Make sure the arguments are correct
