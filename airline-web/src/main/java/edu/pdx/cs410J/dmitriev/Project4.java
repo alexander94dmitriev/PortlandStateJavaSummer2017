@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -169,6 +170,9 @@ public class Project4 {
                     System.out.println(flight.toString());
                 }
             }
+        } catch (ConnectException ex)
+        {
+            error("Unable to connect to " + args[hostIndex]+":"+port);
         }
         catch ( IOException ex )
         {
