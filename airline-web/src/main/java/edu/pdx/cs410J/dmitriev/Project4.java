@@ -77,14 +77,6 @@ public class Project4 {
             }
             portIndex = portOptionIndex + 1;
         }
-        if(searchOptionIndex != -1)
-        {
-            if(allOptions.contains(args[searchOptionIndex+1]))
-            {
-                System.err.println("Please, make sure to add airline name, source and destination after -search");
-                System.exit(1);
-            }
-        }
 
             //Make a list of indexes to find the max. max+1 is the first argument for creating objects
             optionIndexes = Arrays.asList(printOptionIndex, hostOptionIndex, searchOptionIndex);
@@ -144,9 +136,9 @@ public class Project4 {
                     String contents = response.getContent();
                     System.out.println(contents);
                 } else if (searchOptionIndex != -1) {
-                    if (args.length - firstIndex > 3) {
-                        error("Please, provide only airline name, source and destination for search");
-                    }
+                    //if (args.length - firstIndex > 3) {
+                    //    error("Please, provide only airline name, source and destination for search");
+                    //}
                     response = client.searchFlight(args[firstIndex], args[firstIndex + 1], args[firstIndex + 2]);
                     String contents = response.getContent();
                     System.out.println(contents);
