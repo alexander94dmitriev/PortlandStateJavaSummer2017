@@ -6,8 +6,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.shared.UmbrellaException;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
@@ -26,22 +26,28 @@ public class AirlineGwt implements EntryPoint {
   private final Logger logger;
 
   @VisibleForTesting
+  Button submit;
+
+  @VisibleForTesting
   Button showAirlineButton;
 
   @VisibleForTesting
-  Button showUndeclaredExceptionButton;
+  Button searchFlight;
 
   @VisibleForTesting
-  Button showDeclaredExceptionButton;
+  Button prettyPrint;
 
   @VisibleForTesting
-  Button showClientSideExceptionButton;
+  Button showAirlineName;
 
   @VisibleForTesting
-  Button createAirline;
+  Button createFlightDialogBox;
 
   @VisibleForTesting
-  Button helpMenu;
+  DialogBox createFlightBox;
+
+  @VisibleForTesting
+  MenuBar helpBar;
 
 
   public AirlineGwt() {
@@ -88,110 +94,116 @@ public class AirlineGwt implements EntryPoint {
     return throwable;
   }
 
-  private void addWidgets(VerticalPanel panel) {
-    showAirlineButton = new Button("<b>Show Airline</b>");
-    showAirlineButton.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent clickEvent) {
-        showAirline();
-      }
-    });
+  private void addCreatorWidgets(VerticalPanel panel) {
 
-    createAirline = new Button("Create new Airline");
-    createAirline.addClickHandler(new ClickHandler() {
+    showAirlineName = new Button("Show Airline name");
+    showAirlineName.setWidth("200px");
+    showAirlineName.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent clickEvent) { showAirlineName(); }
     });
-
-    helpMenu = new Button("Help");
-    helpMenu.addAttachHandler(new AttachEvent.Handler() {
-      @Override
-      public void onAttachOrDetach(AttachEvent attachEvent) {
-        alerter.alert("This should be a menu with README item");
-      }
-    });
-
-    showUndeclaredExceptionButton = new Button("Show undeclared exception");
-    showUndeclaredExceptionButton.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent clickEvent) {
-        showUndeclaredException();
-      }
-    });
-
-    showDeclaredExceptionButton = new Button("Show declared exception");
-    showDeclaredExceptionButton.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent clickEvent) {
-        showDeclaredException();
-      }
-    });
-
-    showClientSideExceptionButton= new Button("Show client-side exception");
-    showClientSideExceptionButton.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent clickEvent) {
-        throwClientSideException();
-      }
-    });
-
     final TextBox airlineNameBox = new TextBox();
-    airlineNameBox.setWidth("220");
+    airlineNameBox.setWidth("200px");
     airlineNameBox.setName("airlineName");
     Label airlineTitle = new Label("Create Airline");
-    panel.add(airlineTitle);
-    panel.add(airlineNameBox);
-    panel.add(new Button("Submit", new ClickHandler() {
+
+    submit = new Button("Submit");
+    submit.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent clickEvent) {
         createAirline(airlineNameBox.getText());
         alerter.alert("Airline has been created: "+ airlineNameBox.getText());
         //createAirlinePanel.submit();
       }
-    }));
+    });
 
-    panel.add(createAirline);
+    createFlightDialogBox = new Button("Add a new Flight to an Airline");
+    createFlightDialogBox.setWidth("200px");
+    createFlightDialogBox.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent clickEvent) {
+        createFlightBox = showCreateFlightDialogBox();
+      }
+    });
+
+    panel.add(airlineTitle);
+    panel.add(airlineNameBox);
+    panel.add(submit);
+    panel.add(new InlineHTML("<br/>"));
+    panel.add(showAirlineName);
+    panel.add(createFlightDialogBox);
+
+    panel.setCellHorizontalAlignment(showAirlineName, HasHorizontalAlignment.ALIGN_CENTER);
+    panel.setCellHorizontalAlignment(createFlightDialogBox, HasHorizontalAlignment.ALIGN_CENTER);
+
+  }
+
+  private void addDisplayWidgets(VerticalPanel panel)
+  {
+    showAirlineButton = new Button("<b>Show Airline</b>");
+    showAirlineButton.setWidth("200px");
+    showAirlineButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent clickEvent) {
+        showAirline();
+      }
+    });
+    prettyPrint = new Button("<b>Pretty Print Airline</b>");
+    prettyPrint.setWidth("200px");
+    prettyPrint.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent clickEvent) {
+        prettyPrintAirline();
+      }
+    });
+    searchFlight = new Button("<b>Search the flight</b>");
+    searchFlight.setWidth("200px");
+    searchFlight.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent clickEvent) {
+        alerter.alert("Add search functionality");
+      }
+    });
+
     panel.add(showAirlineButton);
-    panel.add(showUndeclaredExceptionButton);
-    panel.add(showDeclaredExceptionButton);
-    panel.add(showClientSideExceptionButton);
-
+    panel.add(prettyPrint);
+    panel.add(searchFlight);
   }
 
-  private void throwClientSideException() {
-    logger.info("About to throw a client-side exception");
-    throw new IllegalStateException("Expected exception on the client side");
+  private void addHelpWidgets(VerticalPanel panel)
+  {
+    Label label = new Label("Help Menu");
+    helpBar = showHelpMenu();
+    panel.add(label);
+    panel.add(helpBar);
+    label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+    panel.setCellHorizontalAlignment(helpBar, HasHorizontalAlignment.ALIGN_CENTER);
   }
 
-  private void showUndeclaredException() {
-    logger.info("Calling throwUndeclaredException");
-    airlineService.throwUndeclaredException(new AsyncCallback<Void>() {
-      @Override
-      public void onFailure(Throwable ex) {
-        alertOnException(ex);
-      }
+  private MenuBar showHelpMenu() {
+    MenuBar HelpMenu = new MenuBar();
+    HelpMenu.setAutoOpen(true);
+    HelpMenu.setWidth("100px");
+    HelpMenu.setAnimationEnabled(true);
+    HelpMenu.setLayoutData("Help Menu");
 
+    HelpMenu.addItem("README", new Command() {
       @Override
-      public void onSuccess(Void aVoid) {
-        alerter.alert("This shouldn't happen");
-      }
-    });
-  }
-
-  private void showDeclaredException() {
-    logger.info("Calling throwDeclaredException");
-    airlineService.throwDeclaredException(new AsyncCallback<Void>() {
-      @Override
-      public void onFailure(Throwable ex) {
-        alertOnException(ex);
-      }
-
-      @Override
-      public void onSuccess(Void aVoid) {
-        alerter.alert("This shouldn't happen");
+      public void execute() {
+       alerter.alert("This program is GWT web application that allows\n" +
+               "to create an airline and assign new flights to it.\n" +
+               "First, don't forget to create an airline before adding flight.\n" +
+               "Then, click 'Add a new flight to an Airline' and add all information.\n" +
+               "Make sure to follow the requirements. Also, you can display the info\n" +
+               "about an airline and its flights, pretty print it and search for the flights\n" +
+               "with specific source and destination.\n" +
+               "Good luck!\n");
       }
     });
+
+    return HelpMenu;
   }
+
 
   private void getAirlineName() {
     logger.info("Calling getAirlineName");
@@ -212,7 +224,7 @@ public class AirlineGwt implements EntryPoint {
     airlineService.getAirlineName(new AsyncCallback<String>() {
       @Override
       public void onFailure(Throwable throwable) {
-        alertOnException(throwable);
+        alerter.alert(throwable.getMessage());
       }
 
       @Override
@@ -228,7 +240,7 @@ public class AirlineGwt implements EntryPoint {
 
       @Override
       public void onFailure(Throwable ex) {
-        alertOnException(ex);
+        alerter.alert("Error: " + ex.getMessage());
       }
 
       @Override
@@ -244,18 +256,155 @@ public class AirlineGwt implements EntryPoint {
     });
   }
 
+  private void prettyPrintAirline() {
+    logger.info("Calling getAirline");
+    airlineService.getAirline(new AsyncCallback<Airline>() {
+
+      @Override
+      public void onFailure(Throwable ex) {
+        alerter.alert("Error: " + ex.getMessage());
+      }
+
+      @Override
+      public void onSuccess(Airline airline) {
+        StringBuilder sb = new StringBuilder("\t*****************AIRLINE*****************\n" + "Airline: " + airline.getName());
+        Collection<Flight> flights = airline.getFlights();
+        for (Flight flight : flights) {
+          sb.append(flight);
+          sb.append("\n");
+        }
+        alerter.alert(sb.toString());
+      }
+    });
+  }
+
   private void createAirline(String airlineName) {
-    logger.info("Calling createAirline");
+    logger.info("Calling showAirlineName");
     airlineService.createAirline(airlineName, new AsyncCallback<Airline>() {
       @Override
       public void onFailure(Throwable ex) {
-        alertOnException(ex);
+        alerter.alert("Error: " + ex.getMessage());
       }
 
       @Override
       public void onSuccess(Airline airline) {
         String airlineName = airline.getName();
         alerter.alert("New Airline name: "+ airlineName);
+      }
+    });
+  }
+
+  private DialogBox showCreateFlightDialogBox() {
+    logger.info("Creating Dialog Box");
+    final DialogBox dialogBox = new DialogBox(false, true);
+    dialogBox.setAnimationType(PopupPanel.AnimationType.CENTER);
+    dialogBox.setPopupPosition(230,40);
+
+    dialogBox.setText("Create a new Flight");
+    VerticalPanel panel = new VerticalPanel();
+    final TextBox flightNumber = new TextBox();
+    flightNumber.setName("flightNumber");
+    flightNumber.getElement().setPropertyString("placeholder","Flight Number");
+    panel.add(flightNumber);
+    final TextBox src = new TextBox();
+    src.setName("src");
+    src.getElement().setPropertyString("placeholder","Source Code");
+    panel.add(src);
+    final TextBox departDate = new TextBox();
+    departDate.setName("departDate");
+    departDate.getElement().setPropertyString("placeholder","Departure Date");
+    panel.add(departDate);
+    final TextBox departTime = new TextBox();
+    departTime.setName("departDate");
+    departTime.getElement().setPropertyString("placeholder","Departure Time");
+    panel.add(departTime);
+    final TextBox departAmPm = new TextBox();
+    departAmPm.setName("departAmPm");
+    departAmPm.getElement().setPropertyString("placeholder","am/pm");
+    panel.add(departAmPm);
+    final TextBox dest = new TextBox();
+    dest.setName("dest");
+    dest.getElement().setPropertyString("placeholder","Destination Code");
+    panel.add(dest);
+    final TextBox arrivalDate = new TextBox();
+    arrivalDate.setName("arrivalDate");
+    arrivalDate.getElement().setPropertyString("placeholder","Arrival Date");
+    panel.add(arrivalDate);
+    final TextBox arrivalTime = new TextBox();
+    arrivalTime.setName("arrivalTime");
+    arrivalTime.getElement().setPropertyString("placeholder","Arrival Time");
+    panel.add(arrivalTime);
+    final TextBox arrivalAmPm = new TextBox();
+    arrivalAmPm.setName("arrivalAmPm");
+    arrivalAmPm.getElement().setPropertyString("placeholder","am/pm");
+    panel.add(arrivalAmPm);
+
+    panel.add(new Button("Submit", new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent clickEvent) {
+        checkArgsAndAddFlight(flightNumber.getText(), src.getText(), departDate.getText(), departTime.getText(), departAmPm.getText(),
+                  dest.getText(), arrivalDate.getText(), arrivalTime.getText(), arrivalAmPm.getText());
+
+        //alerter.alert("Everything is ok");
+        dialogBox.hide();
+      }
+    }));
+    panel.add(new Button("Cancel", new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent clickEvent) {
+        dialogBox.hide();
+      }
+    }));
+    dialogBox.setWidget(panel);
+    dialogBox.show();
+    return dialogBox;
+  }
+
+  private void checkArgsAndAddFlight(String flightNumber, String src, String departDate, String departTime, String departAmPm, String dest, String arrivalDate, String arrivalTime, String arrivalAmPm) {
+    logger.info("Calling showAirlineName");
+    final String newFlightNumber = flightNumber;
+    final String newsrc = src;
+    final String newdepartDate = departDate;
+    final String newdepartTime = departTime;
+    final String newdepartAmPm = departAmPm;
+    final String newdest = dest;
+    final String newarrivalDate = arrivalDate;
+    final String newarrivalTime = arrivalTime;
+    final String newarrivalAmPm = arrivalAmPm;
+
+    airlineService.checkArguments(flightNumber, src, departDate, departTime, departAmPm, dest, arrivalDate, arrivalTime, arrivalAmPm, new AsyncCallback<String>() {
+      @Override
+      public void onFailure(Throwable ex) {
+        alerter.alert("Error: " + ex.getMessage());
+      }
+
+      @Override
+      public void onSuccess(String result) {
+        if(result != null) {
+          alerter.alert(result);
+        }
+        airlineService.checkAirlineExistence(new AsyncCallback<Void>() {
+          @Override
+          public void onFailure(Throwable ex) {
+            alerter.alert("Error: " + ex.getMessage());
+          }
+
+          @Override
+          public void onSuccess(Void aVoid) {
+            airlineService.addFlight(newFlightNumber, newsrc, newdepartDate, newdepartTime, newdepartAmPm,
+                    newdest, newarrivalDate, newarrivalTime, newarrivalAmPm, new AsyncCallback<Void>() {
+                      @Override
+                      public void onFailure(Throwable ex) {
+                        alerter.alert("Error: " + ex.getMessage());
+                      }
+
+                      @Override
+                      public void onSuccess(Void aVoid) {
+                        alerter.alert("The airline has been added");
+                      }
+                    });
+          }
+        });
       }
     });
   }
@@ -277,47 +426,20 @@ public class AirlineGwt implements EntryPoint {
 
   private void setupUI() {
     RootPanel rootPanel = RootPanel.get();
-    VerticalPanel panel = new VerticalPanel();
-    rootPanel.add(panel);
-    //final FormPanel createAirline = new FormPanel();
+    VerticalPanel creator = new VerticalPanel();
+    VerticalPanel printer = new VerticalPanel();
+    VerticalPanel help = new VerticalPanel();
+    TabPanel Panel = new TabPanel();
 
-    addWidgets(panel);
-    //setCreateAirlinePanel(createAirline);
-  }
+    addCreatorWidgets(creator);
+    addDisplayWidgets(printer);
+    addHelpWidgets(help);
 
-  private void setCreateAirlinePanel(FormPanel createAirlinePanel) {
-    final TextBox airlineNameBox = new TextBox();
-    airlineNameBox.setWidth("220");
-    airlineNameBox.setName("airlineName");
-    Label airlineTitle = new Label("Create Airline");
-    createAirlinePanel.add(airlineTitle);
-    createAirlinePanel.add(airlineNameBox);
-    createAirlinePanel.add(new Button("Submit", new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent clickEvent) {
-        createAirline(airlineNameBox.getText());
-        //createAirlinePanel.submit();
-      }
-    }));
-    createAirlinePanel.addSubmitHandler(new FormPanel.SubmitHandler() {
-      @Override
-      public void onSubmit(FormPanel.SubmitEvent submitEvent) {
-        if(airlineNameBox.getText().length() == 0)
-        {
-             alerter.alert("Please, add the name before clicking Submit");
-             submitEvent.cancel();
-        }
-
-      }
-    });
-    createAirlinePanel.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-      @Override
-      public void onSubmitComplete(FormPanel.SubmitCompleteEvent submitCompleteEvent) {
-
-        alerter.alert("New airline has been created");
-      }
-    });
-
+    Panel.add(creator,"Creator");
+    Panel.add(printer, "Printer");
+    Panel.add(help, "Help");
+    Panel.setWidth("200px");
+    rootPanel.add(Panel);
   }
 
   private void setUpUncaughtExceptionHandler() {

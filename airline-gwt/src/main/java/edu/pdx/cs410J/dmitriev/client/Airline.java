@@ -5,29 +5,58 @@ import edu.pdx.cs410J.AbstractAirline;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Airline extends AbstractAirline<Flight>
+public class Airline extends AbstractAirline<Flight> implements Comparable<Airline>
 {
-  String airlineName;
+  private Collection<Flight> flights = new ArrayList<>();
+  private String name;
   /**
    * In order for GWT to serialize this class (so that it can be sent between
    * the client and the server), it must have a zero-argument constructor.
    */
   public Airline() {
-
+      name = null;
   }
 
-  private Collection<Flight> flights = new ArrayList<>();
+  public boolean airlineExists()
+  {
+    if(name == null)
+      return false;
+    else return true;
+  }
+  /**
+   * Find a particular flight in the list and return it if found
+   * @param flight
+   *        a flight to find
+   * @return
+   *        the flight found or null
+   */
+  public boolean findFlight(Flight flight) { return this.flights.contains(flight);}
 
+  /**
+   * Getter for the name of airline
+   * @return
+   *          a name of airline
+   */
   @Override
   public String getName() {
-    return airlineName;
+    return name;
   }
 
+  /**
+   * Add a new flight to the list of flights in the airline
+   * @param flight
+   *        a new flight
+   */
   @Override
   public void addFlight(Flight flight) {
     this.flights.add(flight);
   }
 
+  /**
+   * Getter for the list of flights
+   * @return
+   *        the list of flights
+   */
   @Override
   public Collection<Flight> getFlights() {
     return this.flights;
@@ -35,6 +64,26 @@ public class Airline extends AbstractAirline<Flight>
 
   public void createNewAirline(String airlineName)
   {
-    this.airlineName = airlineName;
+    this.name = airlineName;
+  }
+
+
+  @Override
+  public int compareTo(Airline other) {
+    if(other.getName().equals(this.getName()))
+      return 0;
+    else return other.getName().compareTo(this.getName());
+  }
+
+  @Override
+  public boolean equals(Object other)
+  {
+    if (other == null) return false;
+    if (other == this) return true;
+    if (!(other instanceof Airline)) return false;
+    Airline otherAirline = (Airline)other;
+    if(otherAirline.getName().equals(this.getName()))
+      return true;
+    return false;
   }
 }

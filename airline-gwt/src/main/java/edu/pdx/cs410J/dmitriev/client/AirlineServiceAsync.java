@@ -26,4 +26,12 @@ public interface AirlineServiceAsync {
   void createAirline(String airlineName, AsyncCallback<Airline> async);
 
   void getAirlineName(AsyncCallback<String> async);
+
+  void checkArguments(String flightNumber, String src, String departDate, String departTime, String departAmPm, String dest,
+                      String arrivalDate, String arrivalTime, String arrivalAmPm, AsyncCallback<String> async);
+
+  void checkAirlineExistence(AsyncCallback<Void> async);
+
+  void addFlight(String flightNumber, String src, String departDate, String departTime, String departAmPm,
+                 String dest, String arrivalDate, String arrivalTime, String arrivalAmPm, AsyncCallback<Void> async);
 }

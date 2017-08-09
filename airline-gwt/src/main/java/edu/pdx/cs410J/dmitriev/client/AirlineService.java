@@ -3,6 +3,8 @@ package edu.pdx.cs410J.dmitriev.client;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import java.io.IOException;
+
 /**
  * A GWT remote service that returns a dummy airline
  */
@@ -14,9 +16,12 @@ public interface AirlineService extends RemoteService {
    */
   Airline getAirline();
 
-  String getAirlineName();
+  String getAirlineName() throws Throwable;
 
   Airline createAirline(String airlineName);
+
+  String checkArguments(String flightNumber, String src, String departDate, String departTime, String departAmPm,
+                        String dest, String arrivalDate, String arrivalTime, String arrivalAmPm) throws Throwable;
 
   /**
    * Always throws an undeclared exception so that we can see GWT handles it.
@@ -28,6 +33,9 @@ public interface AirlineService extends RemoteService {
    */
   void throwDeclaredException() throws IllegalStateException;
 
+  void checkAirlineExistence() throws Throwable;
 
+  void addFlight(String flightNumber, String src, String departDate, String departTime, String departAmPm,
+                 String dest, String arrivalDate, String arrivalTime, String arrivalAmPm) throws Throwable;
 
 }
