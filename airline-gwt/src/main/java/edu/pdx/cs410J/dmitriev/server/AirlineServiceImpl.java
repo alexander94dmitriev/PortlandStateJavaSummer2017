@@ -16,7 +16,9 @@ public class AirlineServiceImpl extends RemoteServiceServlet implements AirlineS
   Airline airline;
 
   @Override
-  public Airline getAirline() {
+  public Airline getAirline() throws Throwable {
+    if(airline == null)
+      throw new Throwable("There's no airline on server");
     //Flight flight = new Flight();
     //flight.createFlight("42", "PDX", "3/11/2017", "12:40", "am",
     //       "SPB", "4/11/2017", "20:15", "pm");
@@ -69,6 +71,7 @@ public class AirlineServiceImpl extends RemoteServiceServlet implements AirlineS
   public String checkArguments(String flightNumber, String src, String departDate, String departTime, String departAmPm,
                                String dest, String arrivalDate, String arrivalTime, String arrivalAmPm) throws Throwable
   {
+    String name = getAirlineName();
     ArgumentChecker checker = new ArgumentChecker();
 
     String[] args = {flightNumber, src, departDate, departTime, departAmPm, dest, arrivalDate, arrivalTime, arrivalAmPm};

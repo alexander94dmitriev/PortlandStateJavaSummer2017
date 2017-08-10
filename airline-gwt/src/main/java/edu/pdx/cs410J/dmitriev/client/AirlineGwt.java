@@ -296,67 +296,80 @@ public class AirlineGwt implements EntryPoint {
 
   private DialogBox showCreateFlightDialogBox() {
     logger.info("Creating Dialog Box");
+    logger.info("calling show");
     final DialogBox dialogBox = new DialogBox(false, true);
-    dialogBox.setAnimationType(PopupPanel.AnimationType.CENTER);
-    dialogBox.setPopupPosition(230,40);
-
-    dialogBox.setText("Create a new Flight");
-    VerticalPanel panel = new VerticalPanel();
-    final TextBox flightNumber = new TextBox();
-    flightNumber.setName("flightNumber");
-    flightNumber.getElement().setPropertyString("placeholder","Flight Number");
-    panel.add(flightNumber);
-    final TextBox src = new TextBox();
-    src.setName("src");
-    src.getElement().setPropertyString("placeholder","Source Code");
-    panel.add(src);
-    final TextBox departDate = new TextBox();
-    departDate.setName("departDate");
-    departDate.getElement().setPropertyString("placeholder","Departure Date");
-    panel.add(departDate);
-    final TextBox departTime = new TextBox();
-    departTime.setName("departDate");
-    departTime.getElement().setPropertyString("placeholder","Departure Time");
-    panel.add(departTime);
-    final TextBox departAmPm = new TextBox();
-    departAmPm.setName("departAmPm");
-    departAmPm.getElement().setPropertyString("placeholder","am/pm");
-    panel.add(departAmPm);
-    final TextBox dest = new TextBox();
-    dest.setName("dest");
-    dest.getElement().setPropertyString("placeholder","Destination Code");
-    panel.add(dest);
-    final TextBox arrivalDate = new TextBox();
-    arrivalDate.setName("arrivalDate");
-    arrivalDate.getElement().setPropertyString("placeholder","Arrival Date");
-    panel.add(arrivalDate);
-    final TextBox arrivalTime = new TextBox();
-    arrivalTime.setName("arrivalTime");
-    arrivalTime.getElement().setPropertyString("placeholder","Arrival Time");
-    panel.add(arrivalTime);
-    final TextBox arrivalAmPm = new TextBox();
-    arrivalAmPm.setName("arrivalAmPm");
-    arrivalAmPm.getElement().setPropertyString("placeholder","am/pm");
-    panel.add(arrivalAmPm);
-
-    panel.add(new Button("Submit", new ClickHandler() {
+    airlineService.getAirlineName(new AsyncCallback<String>() {
       @Override
-      public void onClick(ClickEvent clickEvent) {
-        checkArgsAndAddFlight(flightNumber.getText(), src.getText(), departDate.getText(), departTime.getText(), departAmPm.getText(),
-                  dest.getText(), arrivalDate.getText(), arrivalTime.getText(), arrivalAmPm.getText());
+      public void onFailure(Throwable throwable) {
+        alerter.alert(throwable.getMessage());
+      }
 
-        //alerter.alert("Everything is ok");
-        dialogBox.hide();
-      }
-    }));
-    panel.add(new Button("Cancel", new ClickHandler() {
       @Override
-      public void onClick(ClickEvent clickEvent) {
-        dialogBox.hide();
+      public void onSuccess(String airlineName) {
+
+        dialogBox.setAnimationType(PopupPanel.AnimationType.CENTER);
+        dialogBox.setPopupPosition(230,40);
+
+        dialogBox.setText("Create a new Flight");
+        VerticalPanel panel = new VerticalPanel();
+        final TextBox flightNumber = new TextBox();
+        flightNumber.setName("flightNumber");
+        flightNumber.getElement().setPropertyString("placeholder","Flight Number");
+        panel.add(flightNumber);
+        final TextBox src = new TextBox();
+        src.setName("src");
+        src.getElement().setPropertyString("placeholder","Source Code");
+        panel.add(src);
+        final TextBox departDate = new TextBox();
+        departDate.setName("departDate");
+        departDate.getElement().setPropertyString("placeholder","Departure Date");
+        panel.add(departDate);
+        final TextBox departTime = new TextBox();
+        departTime.setName("departDate");
+        departTime.getElement().setPropertyString("placeholder","Departure Time");
+        panel.add(departTime);
+        final TextBox departAmPm = new TextBox();
+        departAmPm.setName("departAmPm");
+        departAmPm.getElement().setPropertyString("placeholder","am/pm");
+        panel.add(departAmPm);
+        final TextBox dest = new TextBox();
+        dest.setName("dest");
+        dest.getElement().setPropertyString("placeholder","Destination Code");
+        panel.add(dest);
+        final TextBox arrivalDate = new TextBox();
+        arrivalDate.setName("arrivalDate");
+        arrivalDate.getElement().setPropertyString("placeholder","Arrival Date");
+        panel.add(arrivalDate);
+        final TextBox arrivalTime = new TextBox();
+        arrivalTime.setName("arrivalTime");
+        arrivalTime.getElement().setPropertyString("placeholder","Arrival Time");
+        panel.add(arrivalTime);
+        final TextBox arrivalAmPm = new TextBox();
+        arrivalAmPm.setName("arrivalAmPm");
+        arrivalAmPm.getElement().setPropertyString("placeholder","am/pm");
+        panel.add(arrivalAmPm);
+
+        panel.add(new Button("Submit", new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent clickEvent) {
+            checkArgsAndAddFlight(flightNumber.getText(), src.getText(), departDate.getText(), departTime.getText(), departAmPm.getText(),
+                    dest.getText(), arrivalDate.getText(), arrivalTime.getText(), arrivalAmPm.getText());
+
+            //alerter.alert("Everything is ok");
+            dialogBox.hide();
+          }
+        }));
+        panel.add(new Button("Cancel", new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent clickEvent) {
+            dialogBox.hide();
+          }
+        }));
+        dialogBox.setWidget(panel);
+        dialogBox.show();
       }
-    }));
-    dialogBox.setWidget(panel);
-    dialogBox.show();
+    });
+
     return dialogBox;
   }
 

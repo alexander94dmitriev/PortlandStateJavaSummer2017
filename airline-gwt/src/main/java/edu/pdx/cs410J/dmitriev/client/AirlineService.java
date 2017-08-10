@@ -14,7 +14,7 @@ public interface AirlineService extends RemoteService {
   /**
    * Returns the current date and time on the server
    */
-  Airline getAirline();
+  Airline getAirline() throws Throwable;
 
   String getAirlineName() throws Throwable;
 

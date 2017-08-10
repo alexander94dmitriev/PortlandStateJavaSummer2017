@@ -21,15 +21,5 @@ public class AirlineServiceSyncProxyIT extends HttpRequestHelper {
     assertEquals(200, response.getCode());
   }
 
-  @Test
-  public void canInvokeAirlineServiceWithGwtSyncProxy() {
-    String moduleName = "airline";
-    SyncProxy.setBaseURL(this.webAppUrl + "/" + moduleName + "/");
-
-    AirlineService service = SyncProxy.createSync(AirlineService.class);
-    Airline airline = service.getAirline();
-    assertEquals("Air CS410J", airline.getName());
-    assertEquals(1, airline.getFlights().size());
-  }
 
 }
