@@ -34,4 +34,6 @@ public interface AirlineServiceAsync {
 
   void addFlight(String flightNumber, String src, String departDate, String departTime, String departAmPm,
                  String dest, String arrivalDate, String arrivalTime, String arrivalAmPm, AsyncCallback<Void> async);
+
+  void prettyPrint(AsyncCallback<String> async);
 }

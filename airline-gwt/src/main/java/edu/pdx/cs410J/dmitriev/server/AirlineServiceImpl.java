@@ -7,6 +7,7 @@ import edu.pdx.cs410J.dmitriev.client.Flight;
 import edu.pdx.cs410J.dmitriev.client.AirlineService;
 
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * The server-side implementation of the Airline service
@@ -98,5 +99,28 @@ public class AirlineServiceImpl extends RemoteServiceServlet implements AirlineS
     if(!airline.getFlights().contains(flight))
     airline.addFlight(flight);
     else throw new Exception("This flight already exists");
+  }
+
+  @Override
+  public String prettyPrint() throws Throwable
+  {
+    if (airline == null) throw new Throwable("Unable to pretty print. There's no airline on the server");
+
+    StringBuilder sb = new StringBuilder("*****************AIRLINE*****************\n" + "Airline: " + airline.getName());
+    Collection<Flight> flights = airline.getFlights();
+    if(flights.isEmpty())
+      return sb.toString();
+    sb.append("\n         ***********FLIGHTS***********\n\n");
+    for (Flight flight : flights) {
+      sb.append("- Flight Number: " + flight.getNumber());
+      sb.append("\n- Source Code: " + flight.getSource());
+      //sb.append("- Departure Date and Time: " + flight.getDepartureString());
+      sb.append("\n - Destination Code: " + flight.getDestination());
+      //sb.append(" - Arrival Date and Time: " + flight.getArrivalString());
+      sb.append(" - Flight duration: " + flight.Interval());
+      //sb.append("\n");
+    }
+
+    return sb.toString();
   }
 }

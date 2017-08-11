@@ -4,6 +4,7 @@ import edu.pdx.cs410J.AbstractAirline;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 public class Airline extends AbstractAirline<Flight> implements Comparable<Airline>
 {
@@ -50,6 +51,9 @@ public class Airline extends AbstractAirline<Flight> implements Comparable<Airli
   @Override
   public void addFlight(Flight flight) {
     this.flights.add(flight);
+    //ArrayList<Flight> flightList = new ArrayList<Flight>(this.flights);
+    //Collections.sort(flightList);
+    //this.flights = flightList;
   }
 
   /**
@@ -85,5 +89,11 @@ public class Airline extends AbstractAirline<Flight> implements Comparable<Airli
     if(otherAirline.getName().equals(this.getName()))
       return true;
     return false;
+  }
+
+  @Override
+  public String toString() {
+    return "********AIRLINE********\n" + "Airline: " + this.getName() + "\nNumber of flights: " + this.getFlights().size() +
+            " flights\n\n";
   }
 }

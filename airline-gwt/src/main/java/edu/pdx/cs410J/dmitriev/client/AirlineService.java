@@ -38,4 +38,5 @@ public interface AirlineService extends RemoteService {
   void addFlight(String flightNumber, String src, String departDate, String departTime, String departAmPm,
                  String dest, String arrivalDate, String arrivalTime, String arrivalAmPm) throws Throwable;
 
+  String prettyPrint() throws Throwable;
 }

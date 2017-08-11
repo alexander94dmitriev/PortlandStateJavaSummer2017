@@ -190,14 +190,35 @@ public class AirlineGwt implements EntryPoint {
     HelpMenu.addItem("README", new Command() {
       @Override
       public void execute() {
-       alerter.alert("This program is GWT web application that allows\n" +
-               "to create an airline and assign new flights to it.\n" +
-               "First, don't forget to create an airline before adding flight.\n" +
-               "Then, click 'Add a new flight to an Airline' and add all information.\n" +
-               "Make sure to follow the requirements. Also, you can display the info\n" +
-               "about an airline and its flights, pretty print it and search for the flights\n" +
+        final DialogBox box = new DialogBox();
+        ScrollPanel panel = new ScrollPanel();
+       HTMLPanel contents = new HTMLPanel("This program is GWT web application that allows " +
+               "to create an airline and assign new flights to it. " +
+               "First, don't forget to create an airline before adding flight. " +
+               "Then, click 'Add a new flight to an Airline' and add all information. " +
+               "Make sure to follow the requirements. Also, you can display the info " +
+               "about an airline and its flights, pretty print it and search for the flights " +
                "with specific source and destination.\n" +
                "Good luck!\n");
+       contents.add(new Label(" "));
+       contents.setTitle("README");
+
+       panel.add(contents);
+       panel.setSize("200px","200px");
+       Button close = new Button("Close");
+       close.addClickHandler(new ClickHandler() {
+         @Override
+         public void onClick(ClickEvent clickEvent) {
+          box.hide();
+         }
+       });
+       //panel.add(close);
+        //panel.add(contents);
+        contents.add(close);
+        box.setWidget(panel);
+        //box.setSize("200px","200px");
+        box.setPopupPosition(200,30);
+        box.show();
       }
     });
 
@@ -258,7 +279,7 @@ public class AirlineGwt implements EntryPoint {
 
   private void prettyPrintAirline() {
     logger.info("Calling getAirline");
-    airlineService.getAirline(new AsyncCallback<Airline>() {
+    airlineService.prettyPrint(new AsyncCallback<String>() {
 
       @Override
       public void onFailure(Throwable ex) {
@@ -266,14 +287,9 @@ public class AirlineGwt implements EntryPoint {
       }
 
       @Override
-      public void onSuccess(Airline airline) {
-        StringBuilder sb = new StringBuilder("\t*****************AIRLINE*****************\n" + "Airline: " + airline.getName());
-        Collection<Flight> flights = airline.getFlights();
-        for (Flight flight : flights) {
-          sb.append(flight);
-          sb.append("\n");
-        }
-        alerter.alert(sb.toString());
+      public void onSuccess(String output) {
+
+        alerter.alert(output);
       }
     });
   }

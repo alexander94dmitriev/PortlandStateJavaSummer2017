@@ -251,4 +251,12 @@ public class Flight extends AbstractFlight  implements Comparable<Flight>
     return false;
   }
 
+  @Override
+  public String toString() {
+    return "Flight: " + this.getNumber() + "\nSource code: " + this.getSource()
+            + "\nDeparture time: " + this.getDepartureString() + "\nDestination code: " +
+            this.getDestination() + "\nArrival time: " + this.getArrivalString() +
+            "\nDuration " + this.Interval() + " minutes\n";
+  }
+
 }
