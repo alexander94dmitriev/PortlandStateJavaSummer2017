@@ -4,7 +4,6 @@ import edu.pdx.cs410J.AbstractAirline;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 public class Airline extends AbstractAirline<Flight> implements Comparable<Airline>
 {
@@ -15,7 +14,7 @@ public class Airline extends AbstractAirline<Flight> implements Comparable<Airli
    * the client and the server), it must have a zero-argument constructor.
    */
   public Airline() {
-      name = null;
+      name = "";
   }
 
   public boolean airlineExists()

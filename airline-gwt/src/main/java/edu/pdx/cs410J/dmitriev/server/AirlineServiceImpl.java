@@ -6,8 +6,9 @@ import edu.pdx.cs410J.dmitriev.client.ArgumentChecker;
 import edu.pdx.cs410J.dmitriev.client.Flight;
 import edu.pdx.cs410J.dmitriev.client.AirlineService;
 
-import java.io.IOException;
+import java.text.DateFormat;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * The server-side implementation of the Airline service
@@ -16,17 +17,23 @@ public class AirlineServiceImpl extends RemoteServiceServlet implements AirlineS
 {
   Airline airline;
 
+  /**
+   * Return an airline
+   * @return
+   * @throws Throwable
+   */
   @Override
   public Airline getAirline() throws Throwable {
     if(airline == null)
-      throw new Throwable("There's no airline on server");
-    //Flight flight = new Flight();
-    //flight.createFlight("42", "PDX", "3/11/2017", "12:40", "am",
-    //       "SPB", "4/11/2017", "20:15", "pm");
-    //airline.addFlight(flight);
+      throw new Exception("There's no airline on server");
     return airline;
   }
 
+  /**
+   * Return airline name
+   * @return
+   * @throws Throwable
+   */
   @Override
   public String getAirlineName() throws Throwable
   {
@@ -36,10 +43,22 @@ public class AirlineServiceImpl extends RemoteServiceServlet implements AirlineS
     }
     catch (Throwable ex)
     {
-      throw new Throwable("There's no airline on the server");
+      throw new Exception("There's no airline on the server");
     }
   }
 
+  @Override
+  public void checkAirlineExistence() throws Throwable
+  {
+    if(airline == null) throw new Exception("There's no airline on server");
+  }
+
+  /**
+   * Create airline
+   * @param airlineName
+   *        airline name
+   * @return
+   */
   @Override
   public Airline createAirline(String airlineName) {
     airline = new Airline();
@@ -47,15 +66,6 @@ public class AirlineServiceImpl extends RemoteServiceServlet implements AirlineS
     return airline;
   }
 
-  @Override
-  public void throwUndeclaredException() {
-    throw new IllegalStateException("Expected undeclared exception");
-  }
-
-  @Override
-  public void throwDeclaredException() throws IllegalStateException {
-    throw new IllegalStateException("Expected declared exception");
-  }
 
   /**
    * Log unhandled exceptions to standard error
@@ -69,6 +79,20 @@ public class AirlineServiceImpl extends RemoteServiceServlet implements AirlineS
     super.doUnexpectedFailure(unhandled);
   }
 
+  /**
+   * Check that the arguments are correctly passed to flight
+   * @param flightNumber
+   * @param src
+   * @param departDate
+   * @param departTime
+   * @param departAmPm
+   * @param dest
+   * @param arrivalDate
+   * @param arrivalTime
+   * @param arrivalAmPm
+   * @return
+   * @throws Throwable
+   */
   public String checkArguments(String flightNumber, String src, String departDate, String departTime, String departAmPm,
                                String dest, String arrivalDate, String arrivalTime, String arrivalAmPm) throws Throwable
   {
@@ -78,17 +102,23 @@ public class AirlineServiceImpl extends RemoteServiceServlet implements AirlineS
     String[] args = {flightNumber, src, departDate, departTime, departAmPm, dest, arrivalDate, arrivalTime, arrivalAmPm};
     String result = checker.checkArguments(args,0);
     if (result != null)
-      throw new Throwable(result);
+      throw new Exception(result);
     return null;
   }
 
-  @Override
-  public void checkAirlineExistence() throws Throwable
-  {
-    if(airline.getName() == null)
-      throw new Throwable("The airline does not exists on the server");
-  }
-
+  /**
+   * Create a flight from arguments
+   * @param flightNumber
+   * @param src
+   * @param departDate
+   * @param departTime
+   * @param departAmPm
+   * @param dest
+   * @param arrivalDate
+   * @param arrivalTime
+   * @param arrivalAmPm
+   * @throws Throwable
+   */
   @Override
   public void addFlight(String flightNumber, String src, String departDate, String departTime, String departAmPm,
                  String dest, String arrivalDate, String arrivalTime, String arrivalAmPm) throws Throwable
@@ -101,26 +131,69 @@ public class AirlineServiceImpl extends RemoteServiceServlet implements AirlineS
     else throw new Exception("This flight already exists");
   }
 
+  /**
+   * Pretty print an airline to a string
+   * @return
+   * @throws Throwable
+   */
   @Override
   public String prettyPrint() throws Throwable
   {
-    if (airline == null) throw new Throwable("Unable to pretty print. There's no airline on the server");
+    if (airline == null) throw new Exception("Unable to pretty print. There's no airline on the server");
 
-    StringBuilder sb = new StringBuilder("*****************AIRLINE*****************\n" + "Airline: " + airline.getName());
+    StringBuilder sb = new StringBuilder("<div>*****************AIRLINE*****************<br>" + "Airline: " + airline.getName());
     Collection<Flight> flights = airline.getFlights();
     if(flights.isEmpty())
       return sb.toString();
-    sb.append("\n         ***********FLIGHTS***********\n\n");
-    for (Flight flight : flights) {
-      sb.append("- Flight Number: " + flight.getNumber());
-      sb.append("\n- Source Code: " + flight.getSource());
-      //sb.append("- Departure Date and Time: " + flight.getDepartureString());
-      sb.append("\n - Destination Code: " + flight.getDestination());
-      //sb.append(" - Arrival Date and Time: " + flight.getArrivalString());
-      sb.append(" - Flight duration: " + flight.Interval());
-      //sb.append("\n");
+    sb.append("<br>              ***********FLIGHTS***********<br><br>");
+    for (Flight flight : flights)
+    {
+      sb.append("<br>- Flight Number: " + flight.getNumber());
+      sb.append("<br>- Source Code: " + flight.getSource());
+      DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
+      String finalDate = formatter.format(flight.getDeparture());
+      sb.append("<br>- Departure Date and Time: " + finalDate);
+      sb.append("<br> - Destination Code: " + flight.getDestination());
+      String arrivalDate = formatter.format(flight.getArrival());
+      sb.append("<br>- Arrival Date and Time: " + arrivalDate);
+      sb.append("<br> - Flight duration: " + flight.Interval() + " minutes");
+      sb.append("<br><br>");
     }
 
     return sb.toString();
   }
+
+  /**
+   * Search the flights and pretty print the result
+   * @param src
+   * @param dest
+   * @return
+   * @throws Throwable
+   */
+    @Override
+    public String searchFlights(String src, String dest) throws Throwable {
+        if (airline == null) throw new Exception("Unable to search flights. There's no airline on the server");
+        StringBuilder sb = new StringBuilder("SEARCH RESULTS: <br><br>");
+        Collection<Flight> flights = airline.getFlights();
+        if(flights.isEmpty())
+            return "Nothing to search. Please add the flight first";
+        for (Flight flight : flights)
+        {
+            if (flight.getSource().equals(src.toUpperCase()) && flight.getDestination().equals(dest.toUpperCase())) {
+                sb.append("<br>- Flight Number: " + flight.getNumber());
+                sb.append("<br>- Source Code: " + flight.getSource());
+              DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
+              String finalDate = formatter.format(flight.getDeparture());
+              sb.append("<br>- Departure Date and Time: " + finalDate);
+                sb.append("<br> - Destination Code: " + flight.getDestination());
+              String arrivalDate = formatter.format(flight.getArrival());
+              sb.append("<br>- Arrival Date and Time: " + arrivalDate);
+                sb.append("<br> - Flight duration: " + flight.Interval() + " minutes");
+                sb.append("<br><br>");
+
+            }
+        }
+
+        return sb.toString();
+    }
 }

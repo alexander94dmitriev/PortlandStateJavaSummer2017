@@ -1,6 +1,5 @@
 package edu.pdx.cs410J.dmitriev.client;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
 import edu.pdx.cs410J.AbstractFlight;
 
 import java.util.Date;
@@ -21,7 +20,15 @@ public class Flight extends AbstractFlight  implements Comparable<Flight>
    * the client and the server), it must have a zero-argument constructor.
    */
   public Flight()  {
-
+    this.flightNumber = "";
+    this.src = "";
+    this.departDate = "";
+    this.departTime = "";
+    this.depart_am_pm = "";
+    this.dest = "";
+    this.arriveDate = "";
+    this.arriveTime = "";
+    this.arrive_am_pm = "";
   }
 
   /**
@@ -45,11 +52,11 @@ public class Flight extends AbstractFlight  implements Comparable<Flight>
                            String newDepartTime, String newDepart_am_pm, String newDest, String newArriveDate, String newArriveTime, String newArrive_am_pm)
   {
     this.flightNumber = newFlightNumber;
-    this.src = newSrc;
+    this.src = newSrc.toUpperCase();
     this.departDate = newDepartDate;
     this.departTime = newDepartTime;
     this.depart_am_pm = newDepart_am_pm;
-    this.dest = newDest;
+    this.dest = newDest.toUpperCase();
     this.arriveDate = newArriveDate;
     this.arriveTime = newArriveTime;
     this.arrive_am_pm = newArrive_am_pm;
@@ -58,12 +65,12 @@ public class Flight extends AbstractFlight  implements Comparable<Flight>
   public void createFlight(String newFlightNumber, String newSrc, String newDepartDate, String newDest, String newArriveDate)
   {
     this.flightNumber = newFlightNumber;
-    this.src = newSrc;
+    this.src = newSrc.toUpperCase();
     String []parts = newDepartDate.split(" ");
     this.departDate = parts[0];
     this.departTime = parts[1];
     this.depart_am_pm = parts[2];
-    this.dest = newDest;
+    this.dest = newDest.toUpperCase();
     parts = newArriveDate.split(" ");
     this.arriveDate = parts[0];
     this.arriveTime = parts[1];
@@ -97,9 +104,19 @@ public class Flight extends AbstractFlight  implements Comparable<Flight>
   @Override
   public String getDepartureString() {
     //return this.departDate + " " + this.departTime;
-    String finalDate = DateTimeFormat.getFormat("MM/dd/yyyy h:mm a").format(this.getDeparture());
+    //String finalDate = this.getDeparture().toString();
 
-    return finalDate;
+    //DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
+    //String finalDate = formatter.format(this.getDeparture());
+
+    //String finalDate = DateTimeFormat.getFormat("MM/dd/yyyy h:mm a").format(this.getDeparture());
+
+    //return finalDate;
+    //DateTimeFormat formater = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT);
+
+    //String result = formater.format(getDeparture());
+    //return result;
+    return this.getDeparture().toString();
   }
 
   /**
@@ -141,10 +158,11 @@ public class Flight extends AbstractFlight  implements Comparable<Flight>
   @Override
   public String getArrivalString() {
     //return this.arriveDate + " " + this.arriveTime;
+    //String finalDate = this.getArrival().toString();
+    //String finalDate = DateTimeFormat.getFormat("MM/dd/yyyy h:mm a").format(this.getArrival());
 
-    String finalDate = DateTimeFormat.getFormat("MM/dd/yyyy h:mm a").format(this.getArrival());
-
-    return finalDate;
+    //return finalDate;
+    return this.getArrival().toString();
   }
 
   /**
@@ -183,13 +201,9 @@ public class Flight extends AbstractFlight  implements Comparable<Flight>
    */
   @Override
   public Date getDeparture() {
-    DateTimeFormat dateFormat = DateTimeFormat.getFormat("MM/dd/yyyy h:mm a");
-    Date newFormat = new Date();
-    try {
-      newFormat = dateFormat.parse(this.departDate + " " + this.departTime + " " + this.depart_am_pm);
-    } catch (Exception e) {
-      System.err.println("Unable to parse the date. Make sure it follows format MM/dd/yyyy hh:mm am/pm");
-    }
+    //DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+    //DateTimeFormat dateFormat = DateTimeFormat.getFormat("MM/dd/yyyy h:mm a");
+    Date newFormat = new Date(this.departDate + " " + this.departTime + " " + this.depart_am_pm);
 
     return newFormat;
   }
@@ -200,13 +214,8 @@ public class Flight extends AbstractFlight  implements Comparable<Flight>
    */
   @Override
   public Date getArrival() {
-    DateTimeFormat dateFormat = DateTimeFormat.getFormat("MM/dd/yyyy h:mm a");
-    Date newFormat = new Date();
-    try {
-      newFormat = dateFormat.parse(this.arriveDate + " " + this.arriveTime + " " + this.arrive_am_pm);
-    } catch (Exception e) {
-      System.err.println("Unable to parse the date. Make sure it follows format MM/dd/yyyy hh:mm am/pm");
-    }
+   // SimpleDateFormat format;
+    Date newFormat = new Date(this.arriveDate + " " + this.arriveTime + " " + this.arrive_am_pm);
 
     return newFormat;
   }
@@ -251,12 +260,5 @@ public class Flight extends AbstractFlight  implements Comparable<Flight>
     return false;
   }
 
-  @Override
-  public String toString() {
-    return "Flight: " + this.getNumber() + "\nSource code: " + this.getSource()
-            + "\nDeparture time: " + this.getDepartureString() + "\nDestination code: " +
-            this.getDestination() + "\nArrival time: " + this.getArrivalString() +
-            "\nDuration " + this.Interval() + " minutes\n";
-  }
 
 }

@@ -161,7 +161,7 @@ public class AirlineGwt implements EntryPoint {
     searchFlight.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent clickEvent) {
-        alerter.alert("Add search functionality");
+        setupSearchResults();
       }
     });
 
@@ -181,6 +181,7 @@ public class AirlineGwt implements EntryPoint {
   }
 
   private MenuBar showHelpMenu() {
+
     MenuBar HelpMenu = new MenuBar();
     HelpMenu.setAutoOpen(true);
     HelpMenu.setWidth("100px");
@@ -192,7 +193,7 @@ public class AirlineGwt implements EntryPoint {
       public void execute() {
         final DialogBox box = new DialogBox();
         ScrollPanel panel = new ScrollPanel();
-       HTMLPanel contents = new HTMLPanel("This program is GWT web application that allows " +
+        HTMLPanel contents = new HTMLPanel("This program is GWT web application that allows " +
                "to create an airline and assign new flights to it. " +
                "First, don't forget to create an airline before adding flight. " +
                "Then, click 'Add a new flight to an Airline' and add all information. " +
@@ -200,8 +201,8 @@ public class AirlineGwt implements EntryPoint {
                "about an airline and its flights, pretty print it and search for the flights " +
                "with specific source and destination.\n" +
                "Good luck!\n");
-       contents.add(new Label(" "));
-       contents.setTitle("README");
+        contents.add(new Label(" "));
+        contents.setTitle("README");
 
        panel.add(contents);
        panel.setSize("200px","200px");
@@ -212,17 +213,80 @@ public class AirlineGwt implements EntryPoint {
           box.hide();
          }
        });
-       //panel.add(close);
-        //panel.add(contents);
         contents.add(close);
         box.setWidget(panel);
-        //box.setSize("200px","200px");
         box.setPopupPosition(200,30);
         box.show();
       }
     });
 
     return HelpMenu;
+  }
+
+  private void setupSearchResults()
+  {
+    logger.info("Calling searchFlights");
+    final DialogBox dialogBox = new DialogBox(false, true);
+
+    dialogBox.setAnimationType(PopupPanel.AnimationType.CENTER);
+    dialogBox.setPopupPosition(230,40);
+
+    dialogBox.setText("Search the flights");
+    VerticalPanel panel = new VerticalPanel();
+    final TextBox source = new TextBox();
+    source.setName("src");
+    source.getElement().setPropertyString("placeholder","Source Code");
+    panel.add(source);
+    final TextBox destination = new TextBox();
+    destination.setName("dest");
+    destination.getElement().setPropertyString("placeholder","Destination Code");
+    panel.add(destination);
+
+    panel.add(new Button("Submit", new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent clickEvent) {
+        airlineService.searchFlights(source.getText(), destination.getText(), new AsyncCallback<String>() {
+          @Override
+          public void onFailure(Throwable ex) {
+            alerter.alert(ex.getMessage());
+          }
+
+          @Override
+          public void onSuccess(String data) {
+            final DialogBox box = new DialogBox();
+            ScrollPanel panel = new ScrollPanel();
+            HTMLPanel contents = new HTMLPanel(data);
+            contents.setTitle("Search Results");
+
+            panel.add(contents);
+            panel.setSize("300px","250px");
+            Button close = new Button("Close");
+            close.addClickHandler(new ClickHandler() {
+              @Override
+              public void onClick(ClickEvent clickEvent) {
+                box.hide();
+              }
+            });
+            contents.add(close);
+            box.setWidget(panel);
+            box.setPopupPosition(200,40);
+            box.show();
+            dialogBox.hide();
+          }
+        });
+      }
+    }));
+
+    panel.add(new Button("Cancel", new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent clickEvent) {
+        dialogBox.hide();
+      }
+    }));
+
+    dialogBox.setWidget(panel);
+    dialogBox.show();
+
   }
 
 
@@ -287,9 +351,27 @@ public class AirlineGwt implements EntryPoint {
       }
 
       @Override
-      public void onSuccess(String output) {
+      public void onSuccess(String data) {
 
-        alerter.alert(output);
+        final DialogBox box = new DialogBox();
+        ScrollPanel panel = new ScrollPanel();
+        HTMLPanel contents = new HTMLPanel(data);
+        contents.setTitle("Pretty Print");
+
+        panel.add(contents);
+        panel.setSize("300px","300px");
+        Button close = new Button("Close");
+        close.addClickHandler(new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent clickEvent) {
+            box.hide();
+          }
+        });
+        contents.add(close);
+        box.setWidget(panel);
+        box.setPopupPosition(200,40);
+        panel.setHorizontalScrollPosition(10);
+        box.show();
       }
     });
   }
@@ -312,7 +394,6 @@ public class AirlineGwt implements EntryPoint {
 
   private DialogBox showCreateFlightDialogBox() {
     logger.info("Creating Dialog Box");
-    logger.info("calling show");
     final DialogBox dialogBox = new DialogBox(false, true);
     airlineService.getAirlineName(new AsyncCallback<String>() {
       @Override
@@ -464,9 +545,11 @@ public class AirlineGwt implements EntryPoint {
     addDisplayWidgets(printer);
     addHelpWidgets(help);
 
+
+    //Panel.selectTab(1);
     Panel.add(creator,"Creator");
     Panel.add(printer, "Printer");
-    Panel.add(help, "Help");
+    Panel.add(help, "Helper");
     Panel.setWidth("200px");
     rootPanel.add(Panel);
   }

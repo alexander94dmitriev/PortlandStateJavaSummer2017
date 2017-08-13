@@ -1,7 +1,6 @@
 package edu.pdx.cs410J.dmitriev.client;
 
 import edu.pdx.cs410J.AirportNames;
-import edu.pdx.cs410J.dmitriev.client.AirlineGwt;
 
 /**
  This class handles the check of the arguments for Airline and Flight
@@ -61,7 +60,7 @@ public class ArgumentChecker  {
             return "The source code cannot be more/less than 3 digits";
         }
         if(!src.isEmpty()){
-            for(char c: src.toCharArray()){
+            for(char c: src.toUpperCase().toCharArray()){
                 if(Character.isDigit(c))
                 {
                     return "The source code cannot contain digit";
@@ -118,7 +117,7 @@ public class ArgumentChecker  {
             return "The destination code cannot be more/less than 3 digits";
         }
         if(!dest.isEmpty()){
-            for(char c: dest.toCharArray()){
+            for(char c: dest.toUpperCase().toCharArray()){
                 if(Character.isDigit(c))
                 {
                     return "The destination code cannot contain digit";
